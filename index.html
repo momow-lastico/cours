@@ -863,6 +863,1187 @@ Q: $X\sim\mathcal{G}(p)$ vérifie $P(X > n+k \mid X > n) = $
 E: Absence de mémoire : $P(X>m) = (1-p)^m$.
 
 
+=== Physique | Signaux et électronique | Circuits dans l'ARQS et régimes transitoires du 1er ordre
+@ fiche
+### Lois et dipôles
+- **ARQS** : l'intensité est la même en tout point d'une branche si la taille du circuit est très petite devant $\lambda = c/f$.
+- Conventions récepteur ($u$ et $i$ opposés sur le schéma) et générateur. Puissance reçue en convention récepteur : $P = ui$.
+- **Résistance** : $u = Ri$, $P = Ri^2$. **Condensateur** : $i = C\frac{du}{dt}$, énergie $\frac12Cu^2$, $u$ continue. **Bobine** : $u = L\frac{di}{dt}$, énergie $\frac12Li^2$, $i$ continue.
+- Associations : résistances en série $\sum R_k$, en parallèle $\frac1R = \sum\frac{1}{R_k}$. Condensateurs : en parallèle $\sum C_k$, en série $\frac1C = \sum\frac{1}{C_k}$.
+- Générateur réel (Thévenin) : $u = E - ri$.
+### Régime transitoire du 1er ordre
+- Forme canonique : $\tau\frac{dx}{dt} + x = x_\infty$, solution $x(t) = x_\infty + (x(0^+) - x_\infty)e^{-t/\tau}$.
+- RC : $\tau = RC$ ; RL : $\tau = \frac LR$. Au bout de $5\tau$, on atteint 99 % du régime permanent.
+- La tangente à l'origine coupe l'asymptote en $t = \tau$.
+> ⚠️ Ne jamais écrire la continuité de $i$ dans un condensateur ou de $u$ aux bornes d'une bobine : seules $u_C$ et $i_L$ sont continues.
+@ loi Lois de Kirchhoff
+Loi des nœuds : $\sum_k\varepsilon_ki_k = 0$ (courants entrants comptés positivement). Loi des mailles : $\sum_k\varepsilon_ku_k = 0$ le long d'une maille orientée.
+@ preuve
+Loi des nœuds : conservation de la charge, sans accumulation dans l'ARQS ($\mathrm{div}\,\vec j = 0$). Loi des mailles : la tension est une différence de potentiels, $u_{AB} = V_A - V_B$, et la somme télescopique le long d'une maille fermée est nulle.
+@ formule Ponts diviseurs
+Diviseur de tension (résistances en série alimentées par $U$) : $u_k = \frac{R_k}{\sum_jR_j}U$. Diviseur de courant (conductances en parallèle alimentées par $I$) : $i_k = \frac{G_k}{\sum_jG_j}I$. Ces formules restent valables avec des impédances complexes.
+@ preuve
+En série, $i = \frac{U}{\sum R_j}$ (même courant), donc $u_k = R_ki$. En parallèle, même tension $u = \frac{I}{\sum G_j}$, donc $i_k = G_ku$.
+@ formule Énergie stockée et continuité
+Condensateur : $\mathcal{E} = \frac12Cu^2$ ; bobine : $\mathcal{E} = \frac12Li^2$. La puissance reçue étant finie, $u_C$ et $i_L$ sont des fonctions continues du temps.
+@ preuve
+$P = ui = Cu\frac{du}{dt} = \frac{d}{dt}\left(\frac12Cu^2\right)$, et de même $P = L\frac{di}{dt}i$. Une discontinuité de l'énergie demanderait une puissance infinie.
+@ formule Charge d'un condensateur (circuit RC)
+Pour un échelon $E$ appliqué à $t = 0$ avec $u(0) = 0$ : $RC\frac{du}{dt} + u = E$, donc $u(t) = E\left(1 - e^{-t/\tau}\right)$ et $i(t) = \frac ERe^{-t/\tau}$ avec $\tau = RC$. Le générateur fournit $CE^2$ : la moitié est stockée, l'autre moitié dissipée par effet Joule (indépendamment de $R$).
+@ preuve
+Loi des mailles $E = Ri + u$ avec $i = C\dot u$. On résout avec $u(0^+) = 0$ (continuité). Bilan : $\int_0^\infty Ei\,dt = EQ = CE^2$, $\frac12CE^2$ stockée, et $\int Ri^2dt = \frac{E^2}{R}\frac{\tau}{2} = \frac12CE^2$.
+@ formule Établissement du courant (circuit RL)
+Pour un échelon $E$ avec $i(0) = 0$ : $\frac LR\frac{di}{dt} + i = \frac ER$, donc $i(t) = \frac ER\left(1 - e^{-t/\tau}\right)$ avec $\tau = \frac LR$.
+@ preuve
+Loi des mailles : $E = Ri + L\frac{di}{dt}$, puis on résout l'équation du 1er ordre avec $i(0^+) = 0$ (continuité du courant dans la bobine).
+@ methode Étudier un régime transitoire
+1. Déterminer l'état initial $t = 0^-$ (régime permanent : condensateur = interrupteur ouvert, bobine = fil) et en déduire $u_C(0^+)$, $i_L(0^+)$ par continuité.
+2. Déterminer le régime final $t\to\infty$ (même règle).
+3. Établir l'équation différentielle (lois de Kirchhoff), la mettre sous forme canonique et identifier $\tau$.
+4. Écrire $x(t) = x_\infty + (x(0^+) - x_\infty)e^{-t/\tau}$ ; vérifier les grandeurs discontinues avec la loi des mailles en $0^+$.
+@ methode Simplifier un circuit
+1. Repérer les associations série et parallèle, et les remplacer par des dipôles équivalents.
+2. Utiliser les ponts diviseurs pour une tension ou un courant isolé.
+3. Remplacer une partie complexe par son modèle de Thévenin (f.é.m. à vide, résistance vue avec les sources éteintes).
+4. Pour un potentiel de nœud : Millman.
+@ cartes
+Q: Constante de temps d'un circuit RL ?
+R: $\tau = L/R$.
+Q: Quelle part de l'énergie fournie lors de la charge d'un condensateur sous tension constante est dissipée ?
+R: La moitié, quelle que soit $R$.
+Q: Comportement d'un condensateur et d'une bobine en régime permanent continu ?
+R: Condensateur : interrupteur ouvert ($i = 0$). Bobine : fil ($u = 0$).
+Q: Temps pour atteindre 99 % du régime final en 1er ordre ?
+R: Environ $5\tau$ (exactement $\tau\ln100\approx4{,}6\tau$).
+Q: Association de condensateurs en série ?
+R: $\frac1C = \sum\frac{1}{C_k}$.
+@ quiz
+Q: Juste après la fermeture de l'interrupteur, un condensateur initialement déchargé se comporte comme :
++ un fil
+- un interrupteur ouvert
+- une résistance infinie
+E: $u_C(0^+) = 0$ par continuité.
+Q: Dans un circuit RL, la grandeur continue est :
++ l'intensité dans la bobine
+- la tension aux bornes de la bobine
+- les deux
+E: $u_L = L\,di/dt$ peut subir un saut.
+
+=== Physique | Signaux et électronique | Signaux périodiques et électronique numérique
+@ fiche
+### Signaux périodiques
+- Valeur moyenne $\langle s\rangle = \frac1T\int_0^Ts\,dt$ ; valeur efficace $S_{\text{eff}} = \sqrt{\langle s^2\rangle}$ (sinusoïde : $\frac{S_m}{\sqrt2}$).
+- **Série de Fourier** : $s(t) = a_0 + \sum_{n\geqslant1}A_n\cos(n\omega t + \varphi_n)$ ; $a_0$ est la valeur moyenne, $n = 1$ le fondamental.
+- Spectre : amplitudes $A_n$ en fonction de la fréquence $nf$. Un signal à variations brusques a un spectre riche en hautes fréquences.
+### Électronique numérique
+- **Échantillonnage** à la fréquence $f_e$ : on ne garde que les valeurs $s(kT_e)$.
+- Le spectre de l'échantillonné contient les fréquences $|f\pm kf_e|$ : risque de **repliement** si $f>\frac{f_e}{2}$.
+- **Quantification** sur $N$ bits : $2^N$ niveaux, pas $q = \frac{\Delta U}{2^N}$.
+- **Filtrage numérique** : une équation de récurrence remplace l'équation différentielle (ex : passe-bas $y_{n+1} = y_n + \frac{T_e}{\tau}(x_n - y_n)$).
+@ thm Critère de Shannon-Nyquist
+Pour qu'un signal de fréquence maximale $f_{\max}$ soit échantillonné sans repliement de spectre, il faut $f_e>2f_{\max}$. Une composante de fréquence $f$ avec $\frac{f_e}{2}<f<f_e$ apparaît à la fréquence $f_e - f$.
+@ preuve
+L'échantillonnage revient à multiplier le signal par un peigne de période $T_e$, dont le spectre contient les fréquences $kf_e$. Le produit $\cos(2\pi ft)\cos(2\pi kf_et)$ fait apparaître $|kf_e\pm f|$. Pour que les motifs translatés $[kf_e - f_{\max},kf_e + f_{\max}]$ ne se chevauchent pas, il faut $f_{\max}<f_e - f_{\max}$. Vérification directe : $\cos(2\pi f kT_e) = \cos(2\pi(f_e - f)kT_e)$, les deux sinusoïdes ont les mêmes échantillons.
+@ formule Valeur efficace et puissance (Parseval)
+Pour $s = a_0 + \sum A_n\cos(n\omega t + \varphi_n)$ : $S_{\text{eff}}^2 = a_0^2 + \sum_{n\geqslant1}\frac{A_n^2}{2}$. La puissance moyenne dans une résistance est $\frac{S_{\text{eff}}^2}{R}$ : chaque harmonique contribue indépendamment.
+@ preuve
+On développe $\langle s^2\rangle$ : les produits croisés $\langle\cos(n\omega t + \varphi_n)\cos(m\omega t + \varphi_m)\rangle$ sont nuls pour $n\neq m$, et $\langle\cos^2\rangle = \frac12$.
+@ formule Action d'un filtre linéaire sur un signal périodique
+Si $e(t) = a_0 + \sum A_n\cos(n\omega t + \varphi_n)$, alors $s(t) = H(0)a_0 + \sum|\underline H(jn\omega)|A_n\cos(n\omega t + \varphi_n + \arg\underline H(jn\omega))$.
+@ preuve
+Linéarité (principe de superposition) : chaque composante sinusoïdale est traitée séparément par la fonction de transfert, qui en multiplie l'amplitude par le gain et la déphase de l'argument.
+@ methode Choisir un filtre pour un signal donné
+1. Tracer le spectre du signal et repérer les composantes à garder et à éliminer.
+2. Passe-bas pour extraire la valeur moyenne (coupure $\ll f$), passe-bande étroit (grand $Q$) pour isoler une harmonique.
+3. Intégrateur : passe-bas loin au-delà de la coupure ; dérivateur : passe-haut loin en dessous.
+4. Vérifier l'atténuation de chaque harmonique avec le diagramme de Bode.
+@ methode Analyser un échantillonnage
+1. Lister les fréquences présentes dans le signal.
+2. Calculer les fréquences apparentes $|f - kf_e|$ ramenées dans $[0,\frac{f_e}{2}]$.
+3. Conclure : repliement si une fréquence dépasse $\frac{f_e}{2}$ ; sinon, le spectre est fidèle. Placer un filtre anti-repliement (passe-bas) avant l'échantillonnage.
+@ cartes
+Q: Énoncer le critère de Shannon.
+R: $f_e>2f_{\max}$.
+Q: Valeur efficace d'une sinusoïde d'amplitude $S_m$ ?
+R: $\frac{S_m}{\sqrt2}$.
+Q: Fréquence apparente d'un signal à 900 Hz échantillonné à 1 kHz ?
+R: $1000 - 900 = 100$ Hz (repliement).
+Q: Que représente $a_0$ dans une série de Fourier ?
+R: La valeur moyenne du signal.
+Q: Formule de Parseval pour la valeur efficace ?
+R: $S_{\text{eff}}^2 = a_0^2 + \sum\frac{A_n^2}{2}$.
+@ quiz
+Q: On échantillonne un son de 15 kHz à 44,1 kHz :
++ sans repliement
+- avec repliement vers 29,1 kHz
+- impossible à échantillonner
+E: $44{,}1>2\times15$.
+Q: Le spectre d'un signal créneau contient :
++ des harmoniques impaires d'amplitude décroissant en $1/n$
+- uniquement le fondamental
+- toutes les harmoniques d'amplitude constante
+E: Variations brusques : décroissance lente du spectre.
+
+=== Physique | Signaux et électronique | Oscillateurs harmoniques et amortis
+@ preuve Circuit RLC série
+Loi des mailles : $L\frac{di}{dt} + Ri + \frac qC = E$ avec $i = \dot q$. Par identification avec la forme canonique $\ddot q + \frac{\omega_0}{Q}\dot q + \omega_0^2q$ : $\omega_0^2 = \frac{1}{LC}$ et $\frac{\omega_0}{Q} = \frac RL$, d'où $Q = \frac{L\omega_0}{R} = \frac1R\sqrt{\frac LC}$.
+@ preuve Bande passante à $-3$ dB
+Pour la résonance en intensité, $\underline I = \frac{E}{R(1 + jQ(x - 1/x))}$ avec $x = \omega/\omega_0$. $|\underline I| = \frac{I_{\max}}{\sqrt2}$ si et seulement si $Q|x - 1/x| = 1$, soit $x^2\mp\frac xQ - 1 = 0$. Les deux racines positives vérifient $x_2 - x_1 = \frac1Q$, donc $\Delta\omega = \frac{\omega_0}{Q}$.
+@ formule Solution du régime libre amorti
+Pour $\ddot x + \frac{\omega_0}{Q}\dot x + \omega_0^2x = 0$ :
+- $Q>\frac12$ : $x = e^{-t/\tau}(A\cos\omega t + B\sin\omega t)$, $\tau = \frac{2Q}{\omega_0}$, $\omega = \omega_0\sqrt{1 - \frac{1}{4Q^2}}$ ;
+- $Q = \frac12$ : $x = (A + Bt)e^{-\omega_0t}$ ;
+- $Q<\frac12$ : $x = Ae^{r_1t} + Be^{r_2t}$, $r_{1,2} = \frac{\omega_0}{2Q}\left(-1\pm\sqrt{1 - 4Q^2}\right)$.
+@ preuve
+Équation caractéristique $r^2 + \frac{\omega_0}{Q}r + \omega_0^2 = 0$, de discriminant $\Delta = \omega_0^2\left(\frac{1}{Q^2} - 4\right)$. Racines complexes $-\frac{\omega_0}{2Q}\pm j\omega$ si $\Delta<0$, réelles sinon.
+@ formule Décrément logarithmique
+En régime pseudo-périodique : $\delta = \ln\frac{x(t)}{x(t + T)} = \frac{T}{\tau} = \frac{2\pi}{\sqrt{4Q^2 - 1}}\approx\frac\pi Q$ pour $Q\gg1$.
+@ preuve
+$x(t + T) = e^{-T/\tau}x(t)$ pour la partie oscillante, avec $T = \frac{2\pi}{\omega}$ et $\tau = \frac{2Q}{\omega_0}$, d'où $\frac T\tau = \frac{2\pi}{\omega}\cdot\frac{\omega_0}{2Q} = \frac{\pi}{Q\sqrt{1 - 1/(4Q^2)}}$.
+@ formule Résonance en élongation (amplitude)
+Pour $\ddot x + \frac{\omega_0}{Q}\dot x + \omega_0^2x = \omega_0^2X_0\cos\omega t$ : $X(\omega) = \frac{X_0}{\sqrt{(1 - x^2)^2 + x^2/Q^2}}$ avec $x = \omega/\omega_0$. Il y a résonance si et seulement si $Q>\frac{1}{\sqrt2}$, en $\omega_r = \omega_0\sqrt{1 - \frac{1}{2Q^2}}<\omega_0$ ; pour $Q\gg1$, $X_{\max}\approx QX_0$.
+@ preuve
+En complexes, $\underline X = \frac{X_0}{1 - x^2 + jx/Q}$. On minimise $D(u) = (1 - u)^2 + \frac{u}{Q^2}$ avec $u = x^2$ : $D'(u) = 0$ pour $u = 1 - \frac{1}{2Q^2}$, qui est positif si et seulement si $Q^2>\frac12$.
+@ formule Énergie et facteur de qualité
+Pour $Q\gg1$ : $Q = 2\pi\frac{\text{énergie stockée}}{\text{énergie dissipée par période}}$ ; l'énergie décroît comme $e^{-\omega_0t/Q}$.
+@ preuve
+$\frac{dE}{dt} = -\frac{m\omega_0}{Q}\dot x^2$ (puissance de la force de frottement). En moyenne sur une période, $\langle\dot x^2\rangle = \frac{E}{m}$, donc $\frac{dE}{dt}\approx-\frac{\omega_0}{Q}E$, et l'énergie perdue par période vaut $\frac{\omega_0}{Q}ET = \frac{2\pi}{Q}E$.
+@ methode Étudier une résonance
+1. Écrire l'équation en complexes, isoler la grandeur étudiée sous forme $\frac{A}{1 - x^2 + jx/Q}$ (élongation, tension du condensateur) ou $\frac{A}{1 + jQ(x - 1/x)}$ (vitesse, intensité).
+2. Étudier le module : maximum, valeur en $x = 1$, comportements BF/HF.
+3. Phase : en $x = 1$, quadrature pour l'élongation, phase nulle pour la vitesse.
+@ cartes
+Q: Expression de $\tau$ (enveloppe) en régime pseudo-périodique ?
+R: $\tau = \frac{2Q}{\omega_0}$.
+Q: Condition de résonance en élongation ?
+R: $Q>\frac{1}{\sqrt2}$ ; pulsation $\omega_0\sqrt{1 - \frac{1}{2Q^2}}$.
+Q: Expression du facteur de qualité en termes énergétiques ?
+R: $Q = 2\pi\frac{E_{\text{stockée}}}{E_{\text{dissipée par période}}}$.
+@ quiz
+Q: En régime critique ($Q = 1/2$), la solution est de la forme :
++ $(A + Bt)e^{-\omega_0t}$
+- $Ae^{-\omega_0t}\cos\omega_0t$
+- $A\cos\omega_0t$
+E: Racine double $-\omega_0$.
+
+=== Physique | Signaux et électronique | Électrocinétique et filtrage
+@ preuve Théorème de Millman
+Loi des nœuds en $A$ : $\sum_k\frac{V_k - V_A}{R_k} = 0$ (ou avec des impédances), soit $V_A\sum\frac{1}{R_k} = \sum\frac{V_k}{R_k}$.
+@ preuve Équivalence Thévenin-Norton
+Un dipôle linéaire a une caractéristique affine $u = E_{th} - R_{th}i$ (superposition). Elle s'écrit aussi $i = \frac{E_{th}}{R_{th}} - \frac{u}{R_{th}}$, caractéristique d'une source de courant $I_N$ en parallèle avec $R_{th}$. $E_{th}$ est la tension à vide ; $R_{th}$ est la résistance vue des bornes, sources éteintes.
+@ formule Impédances et admittances
+$\underline Z_R = R$, $\underline Z_L = jL\omega$, $\underline Z_C = \frac{1}{jC\omega}$. Associations comme pour les résistances : série $\sum\underline Z_k$, parallèle $\frac{1}{\underline Z} = \sum\frac{1}{\underline Z_k}$. BF : $L$ = fil, $C$ = coupe-circuit ; HF : $L$ = coupe-circuit, $C$ = fil.
+@ preuve
+En notation complexe, $\frac{d}{dt}\leftrightarrow j\omega$ : $u = L\frac{di}{dt}$ devient $\underline u = jL\omega\underline i$, et $i = C\frac{du}{dt}$ devient $\underline i = jC\omega\underline u$. Les lois de Kirchhoff sont linéaires, donc valables en complexes.
+@ formule Puissance moyenne en régime sinusoïdal
+$P = \langle ui\rangle = U_{\text{eff}}I_{\text{eff}}\cos\varphi = \frac12\mathrm{Re}(\underline u\,\underline i^*)$. Une bobine ou un condensateur idéal reçoit une puissance moyenne nulle ; une impédance $\underline Z = R + jX$ reçoit $P = RI_{\text{eff}}^2$.
+@ preuve
+$u = U_m\cos(\omega t + \varphi)$, $i = I_m\cos\omega t$ : $ui = \frac{U_mI_m}{2}[\cos\varphi + \cos(2\omega t + \varphi)]$, et la moyenne du second terme est nulle. Pour $L$ et $C$, $\varphi = \pm\frac\pi2$.
+@ formule Filtres du premier ordre
+Passe-bas : $\underline H = \frac{H_0}{1 + jx}$, avec $G_{dB} = 20\log H_0 - 10\log(1 + x^2)$ ; asymptotes 0 dB/déc puis $-20$ dB/déc, $\varphi$ de $0$ à $-\frac\pi2$ ($-\frac\pi4$ en $x = 1$). Passe-haut : $\underline H = \frac{H_0jx}{1 + jx}$, de pente $+20$ puis 0 dB/déc. Ici $x = \omega/\omega_c$ et $\omega_c = \frac{1}{RC}$ pour un RC.
+@ preuve
+RC (sortie sur $C$) : diviseur de tension $\underline H = \frac{\underline Z_C}{R + \underline Z_C} = \frac{1}{1 + jRC\omega}$. Asymptotes : $\underline H\approx1$ pour $x\ll1$ et $\underline H\approx\frac{1}{jx}$ pour $x\gg1$, de module $-20\log x$.
+@ formule Filtres du second ordre
+Passe-bas : $\underline H = \frac{H_0}{1 - x^2 + jx/Q}$, asymptotes 0 et $-40$ dB/déc. Passe-bande : $\underline H = \frac{H_0}{1 + jQ(x - 1/x)}$, asymptotes $+20$ et $-20$ dB/déc, maximum $H_0$ en $x = 1$, bande passante $\Delta\omega = \frac{\omega_0}{Q}$. Passe-haut : $\underline H = \frac{-H_0x^2}{1 - x^2 + jx/Q}$.
+@ preuve
+RLC série alimenté par $e$ : sortie sur $C$ (passe-bas) $\underline H = \frac{1}{1 - LC\omega^2 + jRC\omega}$ ; sortie sur $R$ (passe-bande) $\underline H = \frac{R}{R + j(L\omega - 1/(C\omega))}$, que l'on met sous forme canonique avec $Q = \frac{L\omega_0}{R}$.
+@ methode Déterminer la nature d'un filtre sans calcul
+1. Remplacer $L$ et $C$ par leurs équivalents BF (fil / interrupteur ouvert) et HF (interrupteur ouvert / fil).
+2. Calculer simplement la sortie dans les deux cas : nulle ou non.
+3. Conclure : sortie non nulle en BF seulement → passe-bas ; HF seulement → passe-haut ; nulle aux deux → passe-bande.
+4. L'ordre est donné par le nombre de composants réactifs indépendants.
+@ methode Calculer une fonction de transfert
+1. Identifier entrée et sortie (sortie ouverte, sinon tenir compte de la charge).
+2. Utiliser ponts diviseurs et Millman en complexes ; regrouper en impédances équivalentes.
+3. Mettre sous forme canonique en divisant par le terme constant, et identifier $H_0$, $\omega_0$, $Q$.
+@ cartes
+Q: Phase d'un passe-bas du 1er ordre à la coupure ?
+R: $-\frac\pi4$ (et $-3$ dB).
+Q: Pente asymptotique HF d'un passe-bas du 2e ordre ?
+R: $-40$ dB/décade.
+Q: Puissance moyenne reçue par un condensateur idéal en sinusoïdal ?
+R: Nulle.
+Q: Comment obtenir la résistance de Thévenin ?
+R: Résistance vue des bornes en éteignant les sources indépendantes (tension → fil, courant → interrupteur ouvert).
+@ quiz
+Q: Un RLC série avec sortie aux bornes de $R$ est un filtre :
++ passe-bande
+- passe-bas
+- passe-haut
+E: En BF, $C$ coupe ; en HF, $L$ coupe : $i = 0$ dans les deux cas.
+Q: La bande passante d'un passe-bande de facteur $Q = 20$ et $f_0 = 1$ kHz vaut :
++ 50 Hz
+- 20 kHz
+- 1 kHz
+E: $\Delta f = f_0/Q$.
+
+=== Physique | Optique | Optique géométrique
+@ preuve Stigmatisme approché
+Admis (observation) : en dehors des conditions de Gauss, les rayons issus d'un point ne convergent plus en un point unique (aberrations géométriques). Le miroir plan est rigoureusement stigmatique ; les lentilles minces ne le sont qu'approximativement, au premier ordre en l'angle des rayons.
+@ loi Lois de Snell-Descartes
+Le rayon réfléchi et le rayon réfracté sont dans le plan d'incidence. Réflexion : $i_r = i_1$. Réfraction : $n_1\sin i_1 = n_2\sin i_2$ ; si $n_2>n_1$, le rayon se rapproche de la normale.
+@ preuve
+Admises comme lois expérimentales. Elles se retrouvent par le principe de Fermat, ou par la continuité des phases des ondes planes à l'interface (même composante tangentielle du vecteur d'onde : $n_1\sin i_1 = n_2\sin i_2$).
+@ formule Réflexion totale et angle limite
+Si $n_1>n_2$, il y a réflexion totale pour $i_1>i_\ell = \arcsin\frac{n_2}{n_1}$. Application : fibre optique à saut d'indice, d'ouverture numérique $\sin\theta_{\max} = \sqrt{n_c^2 - n_g^2}$ (cœur $n_c$, gaine $n_g$, entrée dans l'air).
+@ preuve
+Il faudrait $\sin i_2 = \frac{n_1}{n_2}\sin i_1>1$, ce qui est impossible. Fibre : réflexion totale à l'interface cœur-gaine si $\cos r\geqslant\frac{n_g}{n_c}$, et $\sin\theta = n_c\sin r$ à l'entrée, d'où $\sin\theta\leqslant\sqrt{n_c^2 - n_g^2}$.
+@ formule Relations de conjugaison des lentilles minces
+Descartes (origine au centre) : $\frac{1}{\overline{OA'}} - \frac{1}{\overline{OA}} = \frac{1}{f'}$, $\gamma = \frac{\overline{A'B'}}{\overline{AB}} = \frac{\overline{OA'}}{\overline{OA}}$. Newton (origines aux foyers) : $\overline{FA}\cdot\overline{F'A'} = ff' = -f'^2$, $\gamma = -\frac{f}{\overline{FA}} = -\frac{\overline{F'A'}}{f'}$.
+@ preuve
+Triangles semblables : le rayon passant par $O$ donne $\gamma = \frac{\overline{OA'}}{\overline{OA}}$ ; le rayon parallèle à l'axe qui ressort par $F'$ donne $\gamma = \frac{\overline{F'A'}}{\overline{F'O}}$. On égale les deux expressions et on divise par $\overline{OA}\cdot\overline{OA'}$.
+@ formule Projection et lentilles accolées
+Pour former l'image réelle d'un objet réel sur un écran à distance $D$, il faut $D\geqslant4f'$ ; pour $D>4f'$, il y a deux positions de la lentille, distantes de $d$, et $f' = \frac{D^2 - d^2}{4D}$ (méthode de Bessel). Des lentilles minces accolées ont des vergences qui s'ajoutent : $V = V_1 + V_2$.
+@ preuve
+Avec $p = -\overline{OA}>0$ et $p' = D - p$ : $\frac{1}{D - p} + \frac1p = \frac{1}{f'}$ donne $p^2 - Dp + Df' = 0$, de discriminant $D^2 - 4Df'\geqslant0$. Les racines diffèrent de $d = \sqrt{D^2 - 4Df'}$. Lentilles accolées : on enchaîne les deux relations de conjugaison avec le même centre $O$.
+@ formule Œil, loupe et lunette
+L'œil normal voit nettement de son punctum proximum ($d_m\approx25$ cm) à l'infini. Loupe : grossissement commercial $G_c = \frac{d_m}{f'}$. Lunette astronomique afocale ($F'_1 = F_2$) : $G = \frac{\alpha'}{\alpha} = -\frac{f'_1}{f'_2}$. Pouvoir séparateur de l'œil : environ $3\times10^{-4}$ rad.
+@ preuve
+Objet dans le plan focal de la loupe : image à l'infini vue sous l'angle $\alpha' = \frac{AB}{f'}$, à comparer à $\alpha = \frac{AB}{d_m}$ à l'œil nu. Lunette : un rayon incliné de $\alpha$ passe par un point de $F'_1$ à la hauteur $-f'_1\alpha$, qui est aussi dans le plan focal objet de l'oculaire : il ressort incliné de $\alpha' = \frac{-f'_1\alpha}{f'_2}$.
+@ formule Miroir plan et dioptre plan
+Miroir plan : l'image est symétrique de l'objet (stigmatisme rigoureux). Dioptre plan dans les conditions de Gauss : $\frac{n_1}{\overline{HA}} = \frac{n_2}{\overline{HA'}}$ (profondeur apparente $\frac{n_2}{n_1}$ fois la vraie).
+@ preuve
+Dioptre : un rayon issu de $A$ à la profondeur $\overline{HA}$ coupe le dioptre en $I$ avec $HI = |\overline{HA}|\tan i_1 = |\overline{HA'}|\tan i_2$. Aux petits angles, $\tan i\approx\sin i$, et Snell-Descartes donne la relation.
+@ methode Étudier un système de deux lentilles
+1. Écrire la chaîne $A\xrightarrow{L_1}A_1\xrightarrow{L_2}A'$ : l'image intermédiaire sert d'objet (éventuellement virtuel) pour $L_2$.
+2. Appliquer deux fois la relation de conjugaison, avec des distances algébriques ; $\gamma = \gamma_1\gamma_2$.
+3. Système afocal : $F'_1 = F_2$ ; foyers du système : image de $F_2$ par $L_1$ (foyer objet), image de $F'_1$ par $L_2$ (foyer image).
+@ cartes
+Q: Relation de Newton ?
+R: $\overline{FA}\cdot\overline{F'A'} = -f'^2$.
+Q: Grossissement commercial d'une loupe ?
+R: $G_c = \frac{d_m}{f'}$ avec $d_m = 25$ cm.
+Q: Ouverture numérique d'une fibre à saut d'indice ?
+R: $\sin\theta_{\max} = \sqrt{n_c^2 - n_g^2}$.
+Q: Vergence de deux lentilles minces accolées ?
+R: $V = V_1 + V_2$.
+@ quiz
+Q: Un poisson semble à 75 cm sous la surface de l'eau ($n = 4/3$) vu de dessus. Sa profondeur réelle est :
++ 1 m
+- 56 cm
+- 75 cm
+E: Profondeur apparente = profondeur réelle × $\frac{n_{\text{air}}}{n_{\text{eau}}}$.
+Q: Pour une lentille de vergence $-5\ \delta$, la distance focale image vaut :
++ $-20$ cm (lentille divergente)
+- $+20$ cm
+- $-5$ m
+E: $f' = 1/V$.
+
+=== Physique | Mécanique | Mécanique du point : dynamique et énergie
+@ preuve Principe fondamental de la dynamique
+C'est un postulat (deuxième loi de Newton), valable dans les référentiels galiléens. Pour un système de points, on somme : les forces intérieures se compensent (troisième loi), d'où le théorème de la résultante cinétique $m\vec a_G = \sum\vec F_{\text{ext}}$.
+@ preuve Théorème de la puissance mécanique
+Théorème de l'énergie cinétique en puissance : $\frac{dE_c}{dt} = \sum P(\vec F)$. Pour une force conservative, $P = \vec F\cdot\vec v = -\overrightarrow{\mathrm{grad}}E_p\cdot\frac{d\overrightarrow{OM}}{dt} = -\frac{dE_p}{dt}$. On regroupe ces termes dans $E_m = E_c + E_p$.
+@ formule Cinématique en coordonnées cylindriques
+$\overrightarrow{OM} = r\vec u_r + z\vec u_z$, $\vec v = \dot r\vec u_r + r\dot\theta\vec u_\theta + \dot z\vec u_z$, $\vec a = (\ddot r - r\dot\theta^2)\vec u_r + (2\dot r\dot\theta + r\ddot\theta)\vec u_\theta + \ddot z\vec u_z$, avec $\frac{d\vec u_r}{dt} = \dot\theta\vec u_\theta$ et $\frac{d\vec u_\theta}{dt} = -\dot\theta\vec u_r$. Mouvement circulaire : $\vec a = -R\dot\theta^2\vec u_r + R\ddot\theta\vec u_\theta$.
+@ preuve
+$\vec u_r = \cos\theta\vec u_x + \sin\theta\vec u_y$, que l'on dérive : $\dot\theta(-\sin\theta\vec u_x + \cos\theta\vec u_y) = \dot\theta\vec u_\theta$. On dérive ensuite $r\vec u_r + z\vec u_z$ deux fois avec ces formules. Remarque : $2\dot r\dot\theta + r\ddot\theta = \frac1r\frac{d}{dt}(r^2\dot\theta)$.
+@ thm Théorème de l'énergie cinétique
+Dans un référentiel galiléen : $\Delta E_c = \sum W_{A\to B}(\vec F)$, et $\frac{dE_c}{dt} = \sum\vec F\cdot\vec v$.
+@ preuve
+$\frac{d}{dt}\left(\frac12mv^2\right) = m\vec v\cdot\frac{d\vec v}{dt} = \vec v\cdot\sum\vec F$ (PFD), puis on intègre entre $A$ et $B$.
+@ formule Énergies potentielles usuelles
+Pesanteur : $E_p = mgz$ ($z$ vers le haut). Ressort : $E_p = \frac12k(\ell - \ell_0)^2$. Gravitation : $E_p = -\frac{GMm}{r}$. Électrostatique : $E_p = qV$ (charge ponctuelle : $\frac{qq'}{4\pi\varepsilon_0r}$). Force constante $\vec F$ : $E_p = -\vec F\cdot\overrightarrow{OM}$.
+@ preuve
+On vérifie $\vec F = -\overrightarrow{\mathrm{grad}}E_p$ : $-\frac{d}{dz}(mgz) = -mg$ ; $-\frac{d}{d\ell}\frac12k(\ell - \ell_0)^2 = -k(\ell - \ell_0)$ ; $-\frac{d}{dr}\left(-\frac{GMm}{r}\right) = -\frac{GMm}{r^2}$, force attractive.
+@ thm Stabilité d'un équilibre et petites oscillations
+Pour un système à un degré de liberté $x$ conservatif, $x_0$ est une position d'équilibre si $E_p'(x_0) = 0$. Elle est stable si $E_p''(x_0)>0$ ; les petites oscillations ont alors la pulsation $\omega_0 = \sqrt{\frac{E_p''(x_0)}{m}}$ (pour $E_c = \frac12m\dot x^2$).
+@ preuve
+On dérive $E_m = \frac12m\dot x^2 + E_p(x)$ (constante) : $\dot x(m\ddot x + E_p'(x)) = 0$, donc $m\ddot x = -E_p'(x)$. Un DL au voisinage de $x_0$ donne $m\ddot x\approx-E_p''(x_0)(x - x_0)$ : oscillateur harmonique si $E_p''(x_0)>0$, divergence exponentielle si $E_p''(x_0)<0$.
+@ formule Chute avec frottement fluide
+Frottement linéaire $-\alpha\vec v$ : $\vec v(t) = \vec v_\ell + (\vec v_0 - \vec v_\ell)e^{-t/\tau}$ avec $\tau = \frac m\alpha$ et une vitesse limite $\vec v_\ell = \frac{m\vec g}{\alpha}$. Frottement quadratique $-\beta v\vec v$ (chute verticale) : $v_\ell = \sqrt{\frac{mg}{\beta}}$.
+@ preuve
+PFD : $m\frac{d\vec v}{dt} = m\vec g - \alpha\vec v$, équation linéaire du 1er ordre de point fixe $\vec v_\ell$. Dans le cas quadratique, la vitesse limite annule l'accélération : $mg = \beta v_\ell^2$.
+@ formule Pendule simple
+$\ddot\theta + \frac g\ell\sin\theta = 0$ ; petites oscillations $T_0 = 2\pi\sqrt{\frac\ell g}$ ; intégrale première $\frac12m\ell^2\dot\theta^2 - mg\ell\cos\theta = $ cste. La période augmente avec l'amplitude (formule de Borda : $T\approx T_0\left(1 + \frac{\theta_0^2}{16}\right)$).
+@ preuve
+TMC par rapport à l'axe ou PFD projeté sur $\vec u_\theta$ : $m\ell\ddot\theta = -mg\sin\theta$. On multiplie par $\dot\theta$ et on intègre pour obtenir l'énergie. Pour les petits angles, $\sin\theta\approx\theta$.
+@ methode Choisir entre PFD et méthode énergétique
+1. Système à un degré de liberté, forces conservatives (ou dont la puissance est connue) : énergie, une équation scalaire sans les forces de liaison qui ne travaillent pas.
+2. Pour la valeur d'une réaction ou d'une tension : PFD projeté sur la direction de cette force.
+3. Pour une condition de décollage, de rupture de contact : $N = 0$, par le PFD.
+4. Pour l'équation du mouvement par l'énergie : dériver $E_m$ et simplifier par $\dot x$.
+@ methode Étudier un mouvement à l'aide d'un profil d'énergie potentielle
+1. Tracer $E_p(x)$ et placer $E_m$ (horizontale).
+2. Zones accessibles : $E_p(x)\leqslant E_m$ ; points de rebroussement : $E_p(x) = E_m$.
+3. Mouvement borné (état lié) entre deux points de rebroussement ; sinon, état de diffusion.
+4. Positions d'équilibre : extremums de $E_p$, stables aux minimums.
+@ cartes
+Q: Dérivée de $\vec u_\theta$ par rapport au temps ?
+R: $-\dot\theta\vec u_r$.
+Q: Pulsation des petites oscillations autour d'un minimum de $E_p$ ?
+R: $\omega_0 = \sqrt{E_p''(x_0)/m}$.
+Q: Vitesse limite en frottement linéaire ?
+R: $\vec v_\ell = \frac{m\vec g}{\alpha}$, atteinte en quelques $\tau = m/\alpha$.
+Q: Période des petites oscillations d'un pendule simple ?
+R: $T_0 = 2\pi\sqrt{\ell/g}$.
+@ quiz
+Q: La tension du fil d'un pendule simple est maximale :
++ au point le plus bas
+- au point le plus haut atteint
+- elle est constante
+E: $T = mg\cos\theta + m\ell\dot\theta^2$, maximum en $\theta = 0$ où la vitesse est maximale.
+Q: Une force de frottement fluide :
++ a une puissance toujours négative
+- dérive d'une énergie potentielle
+- est perpendiculaire à la vitesse
+E: $P = -\alpha v^2\leqslant0$.
+
+=== Physique | Mécanique | Mouvement d'une particule chargée
+@ fiche
+### Force de Lorentz
+- $\vec F = q(\vec E + \vec v\wedge\vec B)$. Le poids est généralement négligeable (électron : $mg\approx10^{-29}$ N).
+- La partie magnétique ne travaille pas : $\vec B$ seul ne change pas la norme de la vitesse.
+### Champ électrique uniforme
+- Accélération constante $\frac{q\vec E}{m}$ : trajectoire rectiligne ou parabolique (analogue de la chute libre).
+- Accélération sous une tension $U$ : $\frac12mv^2 = |q|U$.
+- Énergie en électronvolts : $1\ \text{eV} = 1{,}6\times10^{-19}$ J.
+### Champ magnétique uniforme
+- $\vec v_0\perp\vec B$ : mouvement **circulaire uniforme** de rayon $R = \frac{mv_0}{|q|B}$, de pulsation cyclotron $\omega_c = \frac{|q|B}{m}$ (indépendante de la vitesse).
+- Cas général : hélice d'axe parallèle à $\vec B$.
+@ thm Puissance de la force de Lorentz
+$P = q(\vec E + \vec v\wedge\vec B)\cdot\vec v = q\vec E\cdot\vec v$. En champ électrostatique, l'énergie $\frac12mv^2 + qV$ se conserve ; en champ magnétique seul, $v$ est constante.
+@ preuve
+$(\vec v\wedge\vec B)\cdot\vec v = 0$. En statique, $\vec E = -\overrightarrow{\mathrm{grad}}V$ : $q\vec E\cdot\vec v = -\frac{d(qV)}{dt}$, et le théorème de l'énergie cinétique donne la conservation de $E_c + qV$.
+@ formule Accélération par une différence de potentiel
+Une particule de charge $q$ partant du repos et traversant une différence de potentiel $U$ (avec $qU>0$) atteint la vitesse $v = \sqrt{\frac{2qU}{m}}$ (non relativiste).
+@ preuve
+Conservation de l'énergie : $\frac12mv^2 + qV_B = qV_A$, donc $\frac12mv^2 = q(V_A - V_B) = qU$.
+@ formule Mouvement cyclotron
+Pour $\vec B = B\vec u_z$ uniforme et $\vec v_0\perp\vec B$ : cercle de rayon $R = \frac{mv_0}{|q|B}$ parcouru à la pulsation $\omega_c = \frac{|q|B}{m}$, de période $T = \frac{2\pi m}{|q|B}$. Sens : rotation dans le sens direct autour de $\vec B$ pour $q<0$, indirect pour $q>0$.
+@ preuve
+$v$ est constante, et l'accélération $\frac{q}{m}\vec v\wedge\vec B$ est perpendiculaire à $\vec v$ et dans le plan normal à $\vec B$ : mouvement plan de courbure constante. Norme de l'accélération normale : $\frac{v^2}{R} = \frac{|q|vB}{m}$, d'où $R$. En complexes, $\underline v = v_x + jv_y$ vérifie $\dot{\underline v} = -j\frac{qB}{m}\underline v$, ce qui donne le sens de rotation.
+@ formule Déviation électrostatique
+Une particule entrant à $v_0\vec u_x$ dans un champ $\vec E = E\vec u_y$ sur une longueur $\ell$ suit la parabole $y = \frac{qE}{2mv_0^2}x^2$ ; elle sort avec $\tan\alpha = \frac{qE\ell}{mv_0^2}$.
+@ preuve
+PFD : $\ddot x = 0$, $\ddot y = \frac{qE}{m}$, donc $x = v_0t$ et $y = \frac{qE}{2m}t^2$. On élimine $t$ ; en sortie, $\tan\alpha = \frac{\dot y}{\dot x} = \frac{qE\ell}{mv_0^2}$.
+@ methode Étudier le mouvement d'une particule chargée
+1. Comparer le poids à la force électrique ou magnétique (en général négligeable).
+2. $\vec E$ seul : PFD projeté (accélération constante) ou énergie ($\frac12mv^2 + qV$).
+3. $\vec B$ seul : $v$ constante ; rayon par $\frac{mv^2}{R} = |q|vB$ ; pour un calcul complet, PFD en complexes $\underline v = v_x + jv_y$.
+4. Applications : spectromètre de masse (séparation par $R\propto m$), cyclotron (fréquence $\omega_c$ indépendante de $v$).
+@ cartes
+Q: Pulsation cyclotron ?
+R: $\omega_c = \frac{|q|B}{m}$, indépendante de la vitesse.
+Q: Rayon de la trajectoire dans $\vec B$ uniforme ?
+R: $R = \frac{mv}{|q|B}$.
+Q: Vitesse d'un électron accéléré sous 100 V ?
+R: $v = \sqrt{2eU/m}\approx6\times10^6$ m/s.
+Q: Pourquoi un champ magnétique seul ne change-t-il pas l'énergie cinétique ?
+R: La force $q\vec v\wedge\vec B$ est perpendiculaire à $\vec v$ : sa puissance est nulle.
+@ quiz
+Q: Si on double la vitesse d'une particule dans un champ magnétique uniforme, la période de révolution :
++ ne change pas
+- double
+- est divisée par 2
+E: $T = 2\pi m/(|q|B)$.
+Q: Dans un spectromètre de masse (même $U$ d'accélération, même $B$), le rayon varie comme :
++ $\sqrt m$
+- $m$
+- $1/m$
+E: $v = \sqrt{2qU/m}$ et $R = \frac{mv}{qB} = \frac1B\sqrt{\frac{2mU}{q}}$.
+
+=== Physique | Mécanique | Moment cinétique et forces centrales
+@ preuve Lois de Kepler
+Loi des aires : conservation du moment cinétique ($r^2\dot\theta = C$, l'aire balayée par unité de temps vaut $\frac C2$). Ellipses : la formule de Binet, ou le vecteur de Runge-Lenz, donne une trajectoire conique $r = \frac{p}{1 + e\cos\theta}$. Troisième loi : en circulaire, $\frac{v^2}{r} = \frac{GM}{r^2}$ et $v = \frac{2\pi r}{T}$, d'où $\frac{T^2}{r^3} = \frac{4\pi^2}{GM}$ ; pour une ellipse, l'aire $\pi ab = \frac C2T$ donne le même résultat avec $a$.
+@ preuve Théorème du moment cinétique
+$\frac{d\vec L_O}{dt} = \frac{d\overrightarrow{OM}}{dt}\wedge m\vec v + \overrightarrow{OM}\wedge m\frac{d\vec v}{dt} = \vec v\wedge m\vec v + \overrightarrow{OM}\wedge\sum\vec F$, pour $O$ fixe dans un référentiel galiléen. Le premier terme est nul.
+@ formule Conservation du moment cinétique
+Pour une force centrale ($\vec F$ colinéaire à $\overrightarrow{OM}$) : $\vec L_O$ est constant, le mouvement est plan et $C = r^2\dot\theta$ est constante (constante des aires). La vitesse aréolaire $\frac{dA}{dt} = \frac C2$ est constante.
+@ preuve
+$\vec M_O = \overrightarrow{OM}\wedge\vec F = \vec 0$, donc $\vec L_O$ est constant (TMC). $\overrightarrow{OM}\perp\vec L_O$ : mouvement dans le plan orthogonal à $\vec L_O$. En polaires, $\vec L_O = mr^2\dot\theta\vec u_z$. L'aire balayée pendant $dt$ est $\frac12r\cdot r\,d\theta$.
+@ formule Énergie potentielle effective
+$E_m = \frac12m\dot r^2 + E_{p,\text{eff}}(r)$ avec $E_{p,\text{eff}}(r) = \frac{mC^2}{2r^2} + E_p(r)$. Pour $E_p = -\frac{K}{r}$ ($K = GMm>0$), le minimum de $E_{p,\text{eff}}$ correspond à l'orbite circulaire.
+@ preuve
+$v^2 = \dot r^2 + r^2\dot\theta^2 = \dot r^2 + \frac{C^2}{r^2}$, que l'on reporte dans $E_m = \frac12mv^2 + E_p(r)$.
+@ formule Énergie d'une orbite képlérienne
+Orbite circulaire : $v = \sqrt{\frac{GM}{r}}$, $E_c = -\frac12E_p$, $E_m = -\frac{GMm}{2r}$. Ellipse de demi-grand axe $a$ : $E_m = -\frac{GMm}{2a}$. Parabole : $E_m = 0$ ; hyperbole : $E_m>0$.
+@ preuve
+Circulaire : PFD radial $m\frac{v^2}{r} = \frac{GMm}{r^2}$. Ellipse : au périgée et à l'apogée, $\dot r = 0$, donc $r_p$ et $r_a$ sont les racines de $E_m = \frac{mC^2}{2r^2} - \frac{GMm}{r}$, soit $E_mr^2 + GMmr - \frac{mC^2}{2} = 0$. Leur somme vaut $2a = -\frac{GMm}{E_m}$.
+@ formule Vitesses cosmiques et satellite géostationnaire
+Première vitesse cosmique (orbite rasante) : $v_1 = \sqrt{\frac{GM_T}{R_T}}\approx7{,}9$ km/s. Vitesse de libération : $v_\ell = \sqrt{\frac{2GM_T}{R_T}}\approx11{,}2$ km/s. Orbite géostationnaire : équatoriale, circulaire, $T = 1$ jour sidéral, $r = \left(\frac{GM_TT^2}{4\pi^2}\right)^{1/3}\approx42\,000$ km.
+@ preuve
+$v_1$ : orbite circulaire de rayon $R_T$. $v_\ell$ : énergie mécanique nulle ($\frac12mv^2 = \frac{GMm}{R}$). Géostationnaire : troisième loi de Kepler avec la période de rotation de la Terre.
+@ formule Moment cinétique par rapport à un axe
+$L_\Delta = \vec L_O\cdot\vec u_\Delta$ ($O\in\Delta$). Pour un point en rotation autour de $\Delta$ à la distance $r$ : $L_\Delta = mr^2\dot\theta$. Moment d'une force par rapport à $\Delta$ : $M_\Delta = \pm Fd$, avec $d$ le bras de levier.
+@ preuve
+En cylindriques d'axe $\Delta$, $\overrightarrow{OM}\wedge m\vec v$ a pour composante sur $\vec u_z$ la quantité $mr\cdot r\dot\theta$. Pour la force, seule la composante orthoradiale contribue : $rF_\theta = \pm Fd$.
+@ methode Déterminer les caractéristiques d'une orbite
+1. Écrire les constantes du mouvement : $C = r^2\dot\theta$ (souvent $C = r_pv_p = r_av_a$) et $E_m$.
+2. Périgée et apogée : $\dot r = 0$, d'où l'équation du second degré en $r$.
+3. Demi-grand axe $a = \frac{r_p + r_a}{2}$, excentricité $e = \frac{r_a - r_p}{r_a + r_p}$, période par la troisième loi de Kepler.
+4. Changement d'orbite (transfert de Hohmann) : demi-ellipse tangente aux deux cercles, calcul des $\Delta v$ par l'énergie.
+@ cartes
+Q: Relation entre $E_c$ et $E_p$ sur une orbite circulaire ?
+R: $E_c = -\frac12E_p$, donc $E_m = \frac12E_p<0$.
+Q: Première vitesse cosmique terrestre ?
+R: Environ 7,9 km/s.
+Q: Comment relier $r_p$, $v_p$, $r_a$ et $v_a$ ?
+R: Conservation de $C$ : $r_pv_p = r_av_a$ (vitesse orthoradiale aux apsides).
+Q: Excentricité en fonction de $r_p$ et $r_a$ ?
+R: $e = \frac{r_a - r_p}{r_a + r_p}$.
+@ quiz
+Q: Pour passer d'une orbite circulaire basse à une orbite plus haute, l'énergie mécanique du satellite doit :
++ augmenter, et sa vitesse finale est plus faible
+- augmenter, et sa vitesse finale est plus grande
+- diminuer
+E: $E_m = -\frac{GMm}{2r}$ augmente avec $r$, mais $v = \sqrt{GM/r}$ diminue.
+
+=== Physique | Mécanique | Référentiels non galiléens
+@ preuve PFD dans un référentiel non galiléen
+On écrit le PFD dans $R$ galiléen, $m\vec a_{/R} = \sum\vec F$, puis on applique la composition des accélérations $\vec a_{/R} = \vec a_{/R'} + \vec a_e + \vec a_c$. Les termes $-m\vec a_e$ et $-m\vec a_c$, passés dans l'autre membre, se comportent comme des forces dans $R'$.
+@ formule Composition des vitesses et des accélérations
+$\vec v_{/R} = \vec v_{/R'} + \vec v_e$ et $\vec a_{/R} = \vec a_{/R'} + \vec a_e + \vec a_c$. Translation : $\vec v_e = \vec v(O')$, $\vec a_e = \vec a(O')$, $\vec a_c = \vec0$. Rotation uniforme autour d'un axe fixe : $\vec v_e = \vec\Omega\wedge\overrightarrow{O'M}$, $\vec a_e = -\Omega^2\overrightarrow{HM}$, $\vec a_c = 2\vec\Omega\wedge\vec v_{/R'}$.
+@ preuve
+Formule de dérivation vectorielle : $\left(\frac{d\vec U}{dt}\right)_R = \left(\frac{d\vec U}{dt}\right)_{R'} + \vec\Omega\wedge\vec U$. On l'applique à $\overrightarrow{O'M}$, puis à $\vec v_{/R} = \vec v_{/R'} + \vec\Omega\wedge\overrightarrow{O'M}$ ; pour $\Omega$ constant : $\vec\Omega\wedge(\vec\Omega\wedge\overrightarrow{O'M}) = -\Omega^2\overrightarrow{HM}$.
+@ formule Énergie potentielle centrifuge
+En rotation uniforme autour d'un axe fixe, la force d'inertie d'entraînement $m\Omega^2\overrightarrow{HM}$ dérive de $E_{p,ie} = -\frac12m\Omega^2HM^2$ ; la force de Coriolis ne travaille pas. Le théorème de l'énergie mécanique s'applique dans $R'$ en ajoutant $E_{p,ie}$.
+@ preuve
+En cylindriques d'axe $\Delta$ : $m\Omega^2r\vec u_r = -\frac{d}{dr}\left(-\frac12m\Omega^2r^2\right)\vec u_r$. La force de Coriolis est perpendiculaire à $\vec v_{/R'}$.
+@ formule Pesanteur terrestre et marées
+Le poids $m\vec g = m\vec{\mathcal{G}}_T + m\Omega_T^2\overrightarrow{HM}$ (attraction plus force axifuge) : $g$ est plus faible à l'équateur (environ $-0{,}3$ %), et la verticale est légèrement inclinée. Terme de marée dû à un astre $A$ : $\vec{\mathcal{G}}_A(M) - \vec{\mathcal{G}}_A(T)$, deux bourrelets, deux marées par jour.
+@ preuve
+On applique le PFD dans le référentiel terrestre (rotation uniforme par rapport au géocentrique) pour un point immobile : la force de Coriolis est nulle. Dans le référentiel géocentrique (en translation par rapport au héliocentrique), la force d'inertie d'entraînement $-m\vec a(T) = -m\sum\vec{\mathcal{G}}_A(T)$ compense en partie l'attraction des astres.
+@ methode Équilibre relatif dans un référentiel tournant
+1. Écrire $E_p$ totale dans $R'$ : énergie potentielle physique plus $-\frac12m\Omega^2r^2$.
+2. Positions d'équilibre relatif : $\frac{dE_p}{dx} = 0$ ; stabilité : $\frac{d^2E_p}{dx^2}>0$.
+3. Exemple : perle sur une tige tournante, bille dans un anneau tournant (bifurcation selon $\Omega$).
+@ cartes
+Q: Expression de l'accélération de Coriolis ?
+R: $\vec a_c = 2\vec\Omega\wedge\vec v_{/R'}$.
+Q: Formule de dérivation vectorielle ?
+R: $\left(\frac{d\vec U}{dt}\right)_R = \left(\frac{d\vec U}{dt}\right)_{R'} + \vec\Omega_{R'/R}\wedge\vec U$.
+Q: Pourquoi $g$ est-il plus faible à l'équateur ?
+R: La force axifuge $m\Omega^2HM$ y est maximale et opposée à l'attraction (aplatissement de la Terre aussi).
+@ quiz
+Q: Dans un manège en rotation uniforme, un objet immobile par rapport au manège subit dans ce référentiel :
++ la force centrifuge seulement (en plus des forces réelles)
+- les forces centrifuge et de Coriolis
+- aucune force d'inertie
+E: $\vec v_{/R'} = \vec0$, donc la force de Coriolis est nulle.
+
+=== Physique | Mécanique | Solide en rotation et frottement solide
+@ preuve Théorème de Huygens
+$J_\Delta = \sum m_iHM_i^2$. On écrit $\overrightarrow{HM_i} = \overrightarrow{HH_G} + \overrightarrow{H_GM_i}$ dans le plan orthogonal à l'axe ; le terme croisé $2\overrightarrow{HH_G}\cdot\sum m_i\overrightarrow{H_GM_i}$ est nul par définition de $G$. Il reste $md^2 + J_{\Delta_G}$.
+@ thm Théorème du moment cinétique scalaire pour un solide
+Pour un solide en rotation autour d'un axe fixe $\Delta$ dans un référentiel galiléen : $J_\Delta\frac{d\omega}{dt} = \sum M_\Delta(\text{actions extérieures})$. Le moment d'une liaison pivot parfaite est nul.
+@ preuve
+$L_\Delta = \sum m_ir_i^2\omega = J_\Delta\omega$, car chaque point décrit un cercle de rayon $r_i$ à la vitesse angulaire $\omega$. Le TMC pour un système de points, dont les actions intérieures ont un moment total nul, donne le résultat.
+@ thm Énergie cinétique et puissance pour un solide en rotation
+$E_c = \frac12J_\Delta\omega^2$ ; la puissance d'une action de moment $M_\Delta$ est $P = M_\Delta\omega$ ; théorème de l'énergie cinétique : $\frac{dE_c}{dt} = \sum P_{\text{ext}} + P_{\text{int}}$, avec $P_{\text{int}} = 0$ pour un solide.
+@ preuve
+$E_c = \sum\frac12m_i(r_i\omega)^2$. Pour une force appliquée en $M$ : $\vec F\cdot(\vec\omega\wedge\overrightarrow{OM}) = \vec\omega\cdot(\overrightarrow{OM}\wedge\vec F) = \omega M_\Delta$. Les distances entre points d'un solide étant fixes, les forces intérieures ne travaillent pas.
+@ formule Moments d'inertie usuels
+Cylindre plein (disque) d'axe de révolution : $\frac12mR^2$ ; cylindre creux (anneau) : $mR^2$ ; sphère pleine : $\frac25mR^2$ ; sphère creuse : $\frac23mR^2$ ; tige de longueur $\ell$ par son centre : $\frac{1}{12}m\ell^2$, par une extrémité : $\frac13m\ell^2$.
+@ preuve
+$J = \int r^2dm$. Disque : $\int_0^R r^2\frac{m}{\pi R^2}2\pi r\,dr = \frac12mR^2$. Tige : $\int_{-\ell/2}^{\ell/2}x^2\frac m\ell dx = \frac{m\ell^2}{12}$, puis Huygens pour l'extrémité : $\frac{m\ell^2}{12} + m\frac{\ell^2}{4} = \frac{m\ell^2}{3}$.
+@ formule Pendule pesant
+$J_\Delta\ddot\theta + mgd\sin\theta = 0$, où $d$ est la distance de l'axe à $G$ ; petites oscillations à $\omega_0 = \sqrt{\frac{mgd}{J_\Delta}}$ ; longueur du pendule simple synchrone $\ell = \frac{J_\Delta}{md}$.
+@ preuve
+TMC scalaire : le moment du poids appliqué en $G$ vaut $-mgd\sin\theta$, et le pivot est parfait. On identifie ensuite à $\ddot\theta + \frac g\ell\sin\theta = 0$.
+@ loi Lois de Coulomb du frottement solide
+Réaction $\vec R = \vec N + \vec T$. En l'absence de glissement : $\|\vec T\|\leqslant f_s\|\vec N\|$ (cône de frottement de demi-angle $\arctan f_s$). En cas de glissement : $\vec T$ est colinéaire et opposée à la vitesse de glissement, avec $\|\vec T\| = f_d\|\vec N\|$ ; en général $f_d\leqslant f_s$. Puissance totale des actions de contact : $P = \vec T\cdot\vec v_g\leqslant0$.
+@ preuve
+Lois phénoménologiques (expérimentales). La puissance totale des actions de contact entre deux solides est $\vec R\cdot\vec v_g$, avec $\vec v_g$ la vitesse de glissement ; $\vec N\perp\vec v_g$ et $\vec T$ opposée à $\vec v_g$ la rendent négative ou nulle (nulle sans glissement).
+@ methode Résoudre un problème de rotation
+1. Système, axe, référentiel ; bilan des actions extérieures et de leurs moments par rapport à l'axe (bras de levier, signe selon l'orientation).
+2. TMC scalaire $J\dot\omega = \sum M_\Delta$ pour l'équation du mouvement ; énergie si les actions sont conservatives.
+3. Pour un système fil + poulie + masse : TMC pour la poulie, PFD pour la masse, et la condition de non-glissement du fil ($v = R\omega$).
+@ cartes
+Q: Énergie cinétique d'un solide en rotation ?
+R: $E_c = \frac12J_\Delta\omega^2$.
+Q: Moment d'inertie d'une sphère pleine ?
+R: $\frac25mR^2$.
+Q: Puissance d'un couple de moment $\Gamma$ ?
+R: $P = \Gamma\omega$.
+Q: Signe de la puissance totale des actions de frottement ?
+R: Négative ou nulle (nulle sans glissement).
+@ quiz
+Q: Une bille et un anneau de même masse et même rayon roulent sans glisser sur un plan incliné. Le premier arrivé en bas est :
++ la bille
+- l'anneau
+- ils arrivent ensemble
+E: Moment d'inertie plus faible ($\frac25$ contre 1), donc plus d'énergie en translation.
+
+
+=== Physique | Thermodynamique | Statique des fluides
+@ fiche
+### Pression et forces
+- La pression est une force surfacique normale : $d\vec F = -P\,dS\,\vec n_{\text{ext}}$. $1\ \text{bar} = 10^5$ Pa.
+- **Équivalent volumique des forces de pression** : $d\vec F = -\overrightarrow{\mathrm{grad}}P\,d\tau$.
+- Relation fondamentale de la statique : $\vec0 = -\overrightarrow{\mathrm{grad}}P + \rho\vec g$ (plus éventuellement des forces d'inertie).
+### Applications
+- Fluide incompressible homogène ($z$ vers le haut) : $P(z) = P_0 - \rho g(z - z_0)$ ; 10 m d'eau ≈ 1 bar.
+- Atmosphère isotherme : $P(z) = P_0e^{-z/H}$ avec $H = \frac{RT}{Mg}\approx8$ km.
+- **Théorème d'Archimède** : poussée $\vec\Pi = -\rho_{\text{fluide}}V_{\text{immergé}}\vec g$, appliquée au centre de poussée.
+> ⚠️ La relation $P = P_0 + \rho gh$ n'est valable que pour un fluide incompressible et homogène.
+@ loi Relation fondamentale de la statique des fluides
+Dans un fluide au repos dans un référentiel galiléen, soumis à la pesanteur : $\overrightarrow{\mathrm{grad}}P = \rho\vec g$, soit $\frac{dP}{dz} = -\rho g$ avec $z$ vers le haut.
+@ preuve
+On isole un parallélépipède $dx\,dy\,dz$. Sur l'axe $z$, la résultante des forces de pression vaut $[P(z) - P(z + dz)]dx\,dy = -\frac{\partial P}{\partial z}d\tau$, et de même sur les autres axes : $-\overrightarrow{\mathrm{grad}}P\,d\tau$. À l'équilibre, $-\overrightarrow{\mathrm{grad}}P\,d\tau + \rho\,d\tau\,\vec g = \vec0$.
+@ formule Fluide incompressible et atmosphère isotherme
+Liquide homogène : $P(z) = P_0 + \rho g(z_0 - z)$ (pression croissante avec la profondeur, iso-pression sur les plans horizontaux). Gaz parfait isotherme : $\rho = \frac{PM}{RT}$, donc $P(z) = P_0\exp\left(-\frac{Mgz}{RT}\right)$.
+@ preuve
+On intègre $\frac{dP}{dz} = -\rho g$ : $\rho$ constant dans le premier cas ; $\frac{dP}{P} = -\frac{Mg}{RT}dz$ dans le second. Interprétation statistique : $e^{-mgz/k_BT}$ est un facteur de Boltzmann.
+@ thm Théorème d'Archimède
+Un corps immergé (totalement ou partiellement) dans un fluide au repos subit, de la part de ce fluide, une force verticale vers le haut égale à l'opposé du poids du fluide déplacé : $\vec\Pi = -\rho_fV_{\text{imm}}\vec g$.
+@ preuve
+On remplace le corps par du fluide de même forme : ce fluide est en équilibre, donc les forces de pression qu'il subit compensent exactement son poids. Ces forces ne dépendent que de la surface, et non de ce qu'elle contient : elles s'appliquent de même au corps.
+@ formule Résultante des forces de pression sur une paroi
+Sur une paroi plane verticale de largeur $L$ immergée sur une hauteur $h$ dans un liquide (pression atmosphérique de part et d'autre) : $F = \frac12\rho gLh^2$, appliquée aux deux tiers de la profondeur.
+@ preuve
+$F = \int_0^h\rho gz\,L\,dz = \frac{\rho gLh^2}{2}$. Point d'application : $\frac{\int z\cdot\rho gzL\,dz}{F} = \frac{2h}{3}$.
+@ methode Calculer une force de pression
+1. Exprimer $P(M)$ en tout point de la surface (statique des fluides).
+2. Découper la surface en éléments $dS$, choisis pour que $P$ y soit uniforme, et écrire $d\vec F = P\,dS\,\vec n$ orienté vers la paroi.
+3. Projeter (les symétries annulent certaines composantes) et intégrer.
+4. Ne garder que la surpression si la pression atmosphérique agit des deux côtés.
+@ methode Étudier un équilibre de flottaison
+1. Bilan : poids et poussée d'Archimède.
+2. Équilibre : $\rho_{\text{corps}}V = \rho_fV_{\text{imm}}$, d'où la fraction immergée $\frac{V_{\text{imm}}}{V} = \frac{\rho_{\text{corps}}}{\rho_f}$ (iceberg : environ 90 %).
+3. Pour de petites oscillations verticales : $m\ddot z = -\rho_fgS\,z$, donc $\omega_0 = \sqrt{\frac{\rho_fgS}{m}}$.
+@ cartes
+Q: Équivalent volumique des forces de pression ?
+R: $-\overrightarrow{\mathrm{grad}}P$.
+Q: Hauteur d'eau correspondant à 1 bar ?
+R: Environ 10 m.
+Q: Fraction immergée d'un corps flottant ?
+R: $\frac{\rho_{\text{corps}}}{\rho_{\text{fluide}}}$.
+Q: Pression dans une atmosphère isotherme ?
+R: $P_0e^{-z/H}$ avec $H = RT/(Mg)$.
+@ quiz
+Q: À 30 m sous la surface de la mer, la pression vaut environ :
++ 4 bar
+- 3 bar
+- 30 bar
+E: 1 bar d'atmosphère + 3 bar d'eau.
+Q: Un glaçon flotte dans un verre d'eau. Quand il fond, le niveau d'eau :
++ reste le même
+- monte
+- baisse
+E: La masse d'eau déplacée est égale à la masse du glaçon, qui occupe ensuite exactement ce volume.
+
+=== Physique | Thermodynamique | Changements d'état du corps pur
+@ fiche
+### Diagramme (P, T)
+- Trois courbes d'équilibre (fusion, vaporisation, sublimation) se rejoignent au **point triple**. La courbe de vaporisation s'arrête au **point critique** (au-delà : fluide supercritique).
+- Sur une courbe, l'équilibre diphasé est **monovariant** : $P = P_{\text{sat}}(T)$.
+- Cas de l'eau : la pente de fusion est négative (la glace est moins dense que l'eau liquide).
+### Diagramme de Clapeyron (P, v)
+- Courbe de saturation en cloche, isothermes horizontales dans la zone diphasée (paliers).
+- **Théorème des moments** : titre en vapeur $x_V = \frac{v - v_L}{v_V - v_L} = \frac{LM}{LV}$.
+### Grandeurs de changement d'état
+- Enthalpie massique de vaporisation $\ell_v = \Delta_{\text{vap}}h = h_V - h_L>0$ ; $\Delta_{\text{vap}}s = \frac{\ell_v}{T}$.
+- Eau : $\ell_{\text{fus}}\approx333$ kJ/kg, $\ell_{\text{vap}}\approx2{,}26$ MJ/kg à 100 °C.
+@ formule Titre massique et théorème des moments
+Pour un mélange liquide-vapeur à $T$ donnée : $x_V = \frac{m_V}{m}$, et toute grandeur massique vérifie $y = x_Vy_V + (1 - x_V)y_L$ ($y = v, h, s, u$). D'où $x_V = \frac{v - v_L}{v_V - v_L}$.
+@ preuve
+Additivité des grandeurs extensives : $Y = m_Vy_V + m_Ly_L$, que l'on divise par $m$. On isole ensuite $x_V$ dans l'expression de $v$.
+@ formule Enthalpie et entropie de changement d'état
+À $T$ et $P_{\text{sat}}(T)$ fixées : $Q = \Delta H = m\ell$ et $\Delta S = \frac{m\ell}{T}$ (transformation réversible à température constante). On a $\ell_{\text{vap}}, \ell_{\text{fus}}, \ell_{\text{sub}}>0$ et $\ell_{\text{sub}} = \ell_{\text{fus}} + \ell_{\text{vap}}$ au point triple.
+@ preuve
+La transformation est isobare, donc $Q = \Delta H$. Elle est réversible et à température $T$ constante, égale à celle de la source : $\Delta S = \frac{Q}{T}$. Au point triple, $H$ est une fonction d'état : passer de solide à vapeur directement ou en passant par le liquide donne le même $\Delta H$.
+@ formule Bilan avec changement d'état
+Pour $m$ kg de glace à $T_1<0\,°\text{C}$ portés en eau liquide à $T_2$ : $\Delta H = mc_g(T_0 - T_1) + m\ell_{\text{fus}} + mc_e(T_2 - T_0)$ et $\Delta S = mc_g\ln\frac{T_0}{T_1} + \frac{m\ell_{\text{fus}}}{T_0} + mc_e\ln\frac{T_2}{T_0}$, avec $T_0 = 273$ K.
+@ preuve
+$H$ et $S$ sont des fonctions d'état : on choisit un chemin fictif en trois étapes (échauffement, fusion à $T_0$, échauffement) et on additionne les variations. Pour une phase condensée, $dH = mc\,dT$ et $dS = mc\frac{dT}{T}$.
+@ methode Déterminer l'état final d'un mélange avec changement d'état
+1. Faire une hypothèse sur l'état final (par exemple : tout est liquide, à $T_f$ inconnue).
+2. Écrire $\Delta H_{\text{total}} = 0$ (calorimètre adiabatique et isobare) en décomposant chaque corps selon un chemin fictif.
+3. Résoudre ; si le résultat est incohérent ($T_f<0\,°\text{C}$ avec tout liquide), changer d'hypothèse : $T_f = 0\,°\text{C}$ et une masse $m_g$ de glace restante est l'inconnue.
+@ cartes
+Q: Où s'arrête la courbe de vaporisation dans le diagramme (P, T) ?
+R: Au point critique.
+Q: Théorème des moments ?
+R: $x_V = \frac{v - v_L}{v_V - v_L}$.
+Q: Variance d'un corps pur diphasé ?
+R: 1 : la pression d'équilibre est fixée par la température.
+Q: Entropie de vaporisation massique ?
+R: $\frac{\ell_v}{T_{\text{vap}}}$.
+Q: Pourquoi la courbe de fusion de l'eau a-t-elle une pente négative ?
+R: La glace est moins dense que l'eau liquide ($v_S>v_L$) : relation de Clapeyron.
+@ quiz
+Q: Sur un palier de changement d'état, une transformation isobare est aussi :
++ isotherme
+- adiabatique
+- isochore
+E: Équilibre monovariant : $T$ fixée par $P$.
+Q: Pour faire fondre 1 kg de glace à 0 °C, il faut environ :
++ 333 kJ
+- 4,18 kJ
+- 2 260 kJ
+E: Enthalpie massique de fusion de l'eau.
+
+=== Physique | Thermodynamique | Systèmes ouverts en régime stationnaire
+@ fiche
+### Bilans en écoulement
+- **Débit massique** $D_m$ (kg/s), conservé en régime stationnaire.
+- Premier principe industriel (grandeurs massiques) : $\Delta h + \Delta e_c + g\Delta z = w_u + q$, soit en puissance $D_m(\Delta h + \Delta e_c + g\Delta z) = \mathcal{P}_u + \mathcal{P}_{th}$.
+- Second principe : $\Delta s = s_e + s_c$, avec $s_e = \frac{q}{T_{\text{ext}}}$ et $s_c\geqslant0$.
+### Éléments usuels
+- **Détendeur** (laminage) : $w_u = 0$, $q = 0$, donc $\Delta h = 0$ (isenthalpique).
+- **Tuyère** : $w_u = 0$, adiabatique, donc $\Delta h + \Delta e_c = 0$.
+- **Compresseur, turbine** : souvent adiabatiques, $w_u = \Delta h$ ; compresseur réversible : isentropique.
+- **Échangeur** (évaporateur, condenseur) : $w_u = 0$, $q = \Delta h$.
+### Diagramme (log P, h)
+Isobares horizontales, isenthalpes verticales ; courbe de saturation ; lecture directe des $\Delta h$ (donc des $q$ et $w_u$).
+@ formule Bilans de puissance et d'entropie en écoulement
+$D_m(h_s - h_e + \Delta e_c + g\Delta z) = \mathcal{P}_u + \mathcal{P}_{th}$ ; $D_m(s_s - s_e) = \sum\frac{\mathcal{P}_{th,k}}{T_k} + \dot S_c$ avec $\dot S_c\geqslant0$. Transformation adiabatique réversible : $s_s = s_e$.
+@ preuve
+On multiplie par $D_m = \frac{\delta m}{dt}$ les bilans massiques ; le bilan d'entropie s'établit comme le bilan d'énergie, avec le même système fermé fictif.
+@ formule Efficacité d'une machine frigorifique à compression
+Cycle (compresseur, condenseur, détendeur, évaporateur) : $e = \frac{q_{\text{évap}}}{w_{\text{comp}}} = \frac{h_1 - h_4}{h_2 - h_1}$, avec 1 l'entrée du compresseur, 2 sa sortie, 3 la sortie du condenseur et 4 la sortie du détendeur ($h_4 = h_3$).
+@ preuve
+On applique le premier principe industriel à chaque élément : évaporateur $q = h_1 - h_4$, compresseur adiabatique $w = h_2 - h_1$, détendeur $h_4 = h_3$. Les valeurs de $h$ se lisent sur le diagramme $(\log P,h)$.
+@ methode Analyser une machine à écoulement
+1. Numéroter les points du cycle et identifier chaque élément (rôle, hypothèses : adiabatique, réversible, $w_u = 0$…).
+2. Placer les points sur le diagramme $(\log P,h)$ ou $(T,s)$ avec les hypothèses : isentropique, isobare, isenthalpe, vapeur saturante…
+3. Lire les enthalpies et appliquer le premier principe industriel à chaque élément.
+4. Calculer le rendement ou l'efficacité, les puissances avec $D_m$, et comparer à Carnot.
+@ cartes
+Q: Que se conserve à la traversée d'un détendeur (laminage) ?
+R: L'enthalpie massique ($w_u = 0$, $q = 0$).
+Q: Premier principe industriel ?
+R: $\Delta h + \Delta e_c + g\Delta z = w_u + q$ (massique).
+Q: Allure des isenthalpes dans le diagramme $(\log P,h)$ ?
+R: Droites verticales.
+Q: Travail massique d'un compresseur adiabatique ?
+R: $w_u = h_s - h_e$.
+@ quiz
+Q: Dans une tuyère adiabatique horizontale sans pièce mobile :
++ l'enthalpie diminue quand la vitesse augmente
+- l'enthalpie est conservée
+- la vitesse est conservée
+E: $\Delta h + \Delta\frac{c^2}{2} = 0$.
+
+=== Physique | Thermodynamique | Premier et second principes, machines
+@ preuve Loi de Laplace
+Adiabatique réversible : $dU = -P\,dV$ et $dU = nC_{v,m}dT$, avec $P = \frac{nRT}{V}$. Donc $C_{v,m}\frac{dT}{T} = -R\frac{dV}{V}$, soit $\frac{dT}{T} + (\gamma - 1)\frac{dV}{V} = 0$ (car $\frac{R}{C_{v,m}} = \gamma - 1$). On intègre : $TV^{\gamma-1} = $ cste, puis on utilise $PV = nRT$ pour les autres formes. Autre preuve : $\Delta S = 0$ dans l'expression de $S$ du gaz parfait.
+@ preuve Inégalité de Clausius pour un cycle
+Sur un cycle, $\Delta S = 0 = S_e + S_c$ avec $S_e = \frac{Q_c}{T_c} + \frac{Q_f}{T_f}$ et $S_c\geqslant0$. Donc $S_e = -S_c\leqslant0$, avec égalité si et seulement si le cycle est réversible.
+@ formule Travail des forces de pression
+$\delta W = -P_{\text{ext}}dV$. Transformation quasi-statique : $W = -\int P\,dV$ (aire sous la courbe dans le diagramme de Clapeyron, positive pour un cycle parcouru dans le sens trigonométrique). Isotherme d'un gaz parfait : $W = -nRT\ln\frac{V_f}{V_i}$. Monobare : $W = -P_{\text{ext}}(V_f - V_i)$.
+@ preuve
+Force du piston sur le gaz : $P_{\text{ext}}S$, de déplacement $dx = -\frac{dV}{S}$. Isotherme quasi-statique : $P = \frac{nRT}{V}$, que l'on intègre.
+@ formule Gaz parfait et phases condensées
+Gaz parfait : $PV = nRT$, $U(T)$ et $H(T)$ (lois de Joule), $dU = C_vdT$, $dH = C_pdT$, $C_p - C_v = nR$, $C_v = \frac{nR}{\gamma - 1}$, $C_p = \frac{\gamma nR}{\gamma - 1}$ ; monoatomique : $\gamma = \frac53$, diatomique : $\gamma = \frac75$. Phase condensée idéale : $dU\approx dH = C\,dT$ ; eau : $c = 4{,}18$ kJ·kg⁻¹·K⁻¹.
+@ preuve
+$H = U + PV = U + nRT$, donc $C_p = C_v + nR$ (Mayer). Avec $\gamma = \frac{C_p}{C_v}$, on résout le système de deux équations. Pour une phase condensée, $PV$ est négligeable et quasi constant.
+@ formule Entropie du gaz parfait et des phases condensées
+Gaz parfait : $S = \frac{nR}{\gamma - 1}\ln T + nR\ln V + $ cste $= \frac{nR}{\gamma - 1}\ln(PV^\gamma) + $ cste. Phase condensée : $\Delta S = C\ln\frac{T_f}{T_i}$. Thermostat à $T_0$ recevant $Q$ : $\Delta S = \frac{Q}{T_0}$.
+@ preuve
+Identité thermodynamique $dU = T\,dS - P\,dV$, donc $dS = C_v\frac{dT}{T} + \frac{nR}{V}dV$, que l'on intègre. Pour une phase condensée, $dS = C\frac{dT}{T}$.
+@ formule Rendements de Carnot
+Moteur ditherme : $\eta = \frac{-W}{Q_c}\leqslant1 - \frac{T_f}{T_c}$. Réfrigérateur : $e = \frac{Q_f}{W}\leqslant\frac{T_f}{T_c - T_f}$. Pompe à chaleur : $e = \frac{-Q_c}{W}\leqslant\frac{T_c}{T_c - T_f}$. Égalité pour un cycle réversible (cycle de Carnot : deux isothermes, deux adiabatiques réversibles).
+@ preuve
+Premier principe : $W + Q_c + Q_f = 0$. Second : $\frac{Q_c}{T_c} + \frac{Q_f}{T_f}\leqslant0$. Moteur : $\eta = 1 + \frac{Q_f}{Q_c}$ avec $\frac{Q_f}{Q_c}\leqslant-\frac{T_f}{T_c}$ (car $Q_c>0$). Même méthode pour les autres machines.
+@ formule Détentes de Joule-Gay-Lussac et de Joule-Thomson
+Joule-Gay-Lussac (détente dans le vide, adiabatique, rigide) : $\Delta U = 0$, $T$ constante pour un gaz parfait, irréversible ($\Delta S = nR\ln\frac{V_f}{V_i}>0$). Joule-Thomson (détente lente à travers un bouchon poreux, adiabatique) : $\Delta H = 0$.
+@ preuve
+JGL : $W = 0$ (le vide n'exerce aucune pression) et $Q = 0$, donc $\Delta U = 0$. JT : premier principe industriel avec $w_u = 0$, $q = 0$ et $\Delta e_c\approx0$.
+@ methode Faire un bilan d'entropie
+1. Calculer $\Delta S$ du système avec une fonction d'état (chemin réversible fictif entre les mêmes états).
+2. Calculer l'entropie échangée $S_e = \sum\frac{Q_k}{T_k}$, avec les températures des sources (pas celles du système).
+3. En déduire $S_c = \Delta S - S_e$ et vérifier $S_c\geqslant0$ ; $S_c>0$ signale une irréversibilité (gradients de température, frottements, détente brutale).
+@ methode Mettre en contact deux corps ou un corps et un thermostat
+1. Énergie : $\Delta H_1 + \Delta H_2 = 0$ (enceinte adiabatique, isobare) pour trouver $T_f$ ; avec un thermostat, $T_f = T_0$.
+2. Entropie : $\Delta S = \sum C_k\ln\frac{T_f}{T_k}$ ; avec un thermostat, $S_e = \frac{Q}{T_0}$.
+3. Vérifier que $S_c>0$, en utilisant $\ln x\leqslant x - 1$.
+@ cartes
+Q: Travail reçu lors d'une isotherme réversible d'un gaz parfait ?
+R: $W = -nRT\ln\frac{V_f}{V_i}$.
+Q: $C_v$ d'un gaz parfait en fonction de $\gamma$ ?
+R: $C_v = \frac{nR}{\gamma - 1}$.
+Q: $\gamma$ d'un gaz parfait diatomique à température ambiante ?
+R: $\frac75 = 1{,}4$.
+Q: Identité thermodynamique ?
+R: $dU = T\,dS - P\,dV$ (et $dH = T\,dS + V\,dP$).
+Q: Quelle grandeur se conserve dans une détente de Joule-Thomson ?
+R: L'enthalpie.
+@ quiz
+Q: Un cycle moteur parcouru dans le diagramme $(P,V)$ l'est dans le sens :
++ horaire
+- trigonométrique
+E: $W = -\oint P\,dV<0$ (le système fournit du travail) : l'aire est parcourue dans le sens horaire.
+Q: Une pompe à chaleur entre 280 K et 300 K a une efficacité maximale de :
++ 15
+- 14
+- 0,07
+E: $\frac{T_c}{T_c - T_f} = \frac{300}{20}$.
+
+=== Physique | Thermodynamique | Diffusion thermique
+@ preuve Équation de diffusion (avec source)
+Bilan d'énergie sur un volume $V$ fixe : $\frac{d}{dt}\iiint\rho cT\,d\tau = -\oint\vec j\cdot d\vec S + \iiint p_v\,d\tau$. Avec Ostrogradski et pour tout $V$ : $\rho c\frac{\partial T}{\partial t} = -\mathrm{div}\,\vec j + p_v$. Fourier, $\vec j = -\lambda\overrightarrow{\mathrm{grad}}T$, donne $\mathrm{div}\,\vec j = -\lambda\Delta T$.
+@ loi Loi de Fourier
+$\vec j_{th} = -\lambda\,\overrightarrow{\mathrm{grad}}\,T$ : le flux thermique va des zones chaudes vers les zones froides, proportionnellement au gradient. Flux à travers une surface : $\Phi = \iint\vec j\cdot d\vec S$ (en W).
+@ preuve
+Loi phénoménologique, valable pour des gradients pas trop forts. Le signe moins assure la compatibilité avec le second principe : la production d'entropie $\vec j\cdot\overrightarrow{\mathrm{grad}}\frac1T\geqslant0$.
+@ formule Résistances thermiques
+Régime stationnaire sans source : $\Phi$ est conservé et $R_{th} = \frac{T_1 - T_2}{\Phi}$. Mur plan : $R = \frac{e}{\lambda S}$ ; couche cylindrique : $R = \frac{\ln(r_2/r_1)}{2\pi\lambda L}$ ; coquille sphérique : $R = \frac{1}{4\pi\lambda}\left(\frac{1}{r_1} - \frac{1}{r_2}\right)$ ; conducto-convection (loi de Newton) : $R = \frac{1}{hS}$.
+@ preuve
+Plan : $T$ est affine en $x$ et $\Phi = \lambda S\frac{T_1 - T_2}{e}$. Cylindre : $\Phi = -\lambda2\pi rL\frac{dT}{dr}$ est constant, donc $T = A\ln r + B$, puis on intègre entre $r_1$ et $r_2$. Sphère : $\Phi = -\lambda4\pi r^2\frac{dT}{dr}$ donne $T = \frac Ar + B$.
+@ formule Ordres de grandeur de la diffusion
+Diffusivité $D = \frac{\lambda}{\rho c}$ (m²/s) ; une perturbation diffuse sur une longueur $L$ en $\tau\sim\frac{L^2}{D}$. Eau : $D\approx10^{-7}$ m²/s (1 cm en environ 15 min).
+@ preuve
+Analyse dimensionnelle de $\frac{\partial T}{\partial t} = D\frac{\partial^2T}{\partial x^2}$ : $\frac{\Delta T}{\tau}\sim D\frac{\Delta T}{L^2}$.
+@ formule Onde thermique (régime sinusoïdal)
+Pour une température de surface $T_0 + \theta_0\cos\omega t$ imposée sur un milieu semi-infini : $T(x,t) = T_0 + \theta_0e^{-x/\delta}\cos(\omega t - x/\delta)$ avec $\delta = \sqrt{\frac{2D}{\omega}}$ (atténuation et retard). Variations journalières du sol : $\delta\approx10$ cm ; annuelles : environ 2 m.
+@ preuve
+On cherche $\underline\theta = f(x)e^{j\omega t}$ dans l'équation de diffusion : $j\omega f = Df''$, donc $f = Ae^{-(1+j)x/\delta}$, en écartant la solution divergente.
+@ methode Résoudre un problème de conduction stationnaire
+1. Géométrie et symétries : $T$ ne dépend que d'une variable ($x$, $r$).
+2. Conservation du flux (sans source) : $\Phi(r) = $ cste, ou bilan sur une tranche avec source.
+3. Intégrer la loi de Fourier avec les conditions aux limites (températures imposées, continuité du flux à une interface, loi de Newton en surface).
+4. Raisonner en résistances thermiques en série ou en parallèle quand c'est possible.
+@ cartes
+Q: Résistance thermique d'une couche cylindrique ?
+R: $\frac{\ln(r_2/r_1)}{2\pi\lambda L}$.
+Q: Résistance de conducto-convection ?
+R: $\frac{1}{hS}$.
+Q: Profondeur de pénétration d'une onde thermique ?
+R: $\delta = \sqrt{2D/\omega}$.
+@ quiz
+Q: Pourquoi une cave est-elle à température quasi constante toute l'année ?
++ L'onde thermique annuelle est fortement atténuée en profondeur
+- Le sol est un isolant parfait
+- La convection y est très forte
+E: Amplitude en $e^{-x/\delta}$, avec $\delta$ de l'ordre du mètre pour la période annuelle.
+
+=== Physique | Thermodynamique | Physique statistique : facteur de Boltzmann
+@ preuve Théorème d'équipartition
+Pour un terme d'énergie $\alpha u^2$ : $\langle\alpha u^2\rangle = \frac{\int\alpha u^2e^{-\beta\alpha u^2}du}{\int e^{-\beta\alpha u^2}du} = -\frac{\partial}{\partial\beta}\ln\int e^{-\beta\alpha u^2}du$. L'intégrale gaussienne vaut $\sqrt{\frac{\pi}{\beta\alpha}}$, d'où $\frac{1}{2\beta} = \frac{k_BT}{2}$.
+@ formule Système à deux niveaux
+Niveaux $\pm\varepsilon$ : $p_\pm = \frac{e^{\mp\beta\varepsilon}}{2\,\mathrm{ch}(\beta\varepsilon)}$, $\langle E\rangle = -\varepsilon\,\mathrm{th}\left(\frac{\varepsilon}{k_BT}\right)$, $\Delta E = \frac{\varepsilon}{\mathrm{ch}(\beta\varepsilon)}$. Paramagnétisme (moment $\mu$ dans $B$) : $\langle M\rangle = N\mu\,\mathrm{th}\left(\frac{\mu B}{k_BT}\right)\approx\frac{N\mu^2B}{k_BT}$ à haute température (loi de Curie).
+@ preuve
+$Z = e^{\beta\varepsilon} + e^{-\beta\varepsilon} = 2\,\mathrm{ch}(\beta\varepsilon)$ et $\langle E\rangle = -\frac{\partial\ln Z}{\partial\beta}$. Pour $x\ll1$, $\mathrm{th}\,x\approx x$.
+@ formule Capacité thermique et fluctuations
+$C_v = \frac{d\langle E\rangle}{dT}$ ; l'écart-type relatif de l'énergie d'un système de $N$ particules indépendantes est en $\frac{1}{\sqrt N}$, négligeable à l'échelle macroscopique. Gaz parfait monoatomique : $C_{v,m} = \frac32R$ ; diatomique : $\frac52R$ ; solide : $3R$.
+@ preuve
+Les énergies de particules indépendantes s'ajoutent, ainsi que les variances : $\langle E\rangle\propto N$ et $\sigma_E\propto\sqrt N$. On dérive les énergies moyennes données par l'équipartition, avec $R = N_Ak_B$.
+@ formule Lien macroscopique-microscopique
+$R = N_Ak_B$ ; $k_B = 1{,}38\times10^{-23}$ J/K ; $k_BT\approx\frac{1}{40}$ eV à 300 K. Vitesse quadratique moyenne d'un gaz parfait : $u = \sqrt{\frac{3k_BT}{m}} = \sqrt{\frac{3RT}{M}}$ (environ 500 m/s pour l'air ambiant).
+@ preuve
+Équipartition sur les trois translations : $\frac12m\langle v^2\rangle = \frac32k_BT$.
+@ methode Comparer $k_BT$ et les écarts d'énergie
+1. Évaluer l'écart $\Delta E$ entre niveaux et $k_BT$ (0,025 eV à 300 K).
+2. $k_BT\ll\Delta E$ : seul le niveau fondamental est peuplé (degré de liberté gelé, par exemple les vibrations).
+3. $k_BT\gg\Delta E$ : niveaux équiprobables ; on retrouve la limite classique et l'équipartition.
+@ cartes
+Q: Valeur de $k_BT$ à température ambiante ?
+R: Environ 25 meV = 1/40 eV.
+Q: Formule générale de l'énergie moyenne ?
+R: $\langle E\rangle = -\frac{\partial\ln Z}{\partial\beta}$.
+Q: Loi de Curie ?
+R: L'aimantation paramagnétique est en $\frac1T$ à haute température : $\langle M\rangle\approx\frac{N\mu^2B}{k_BT}$.
+Q: Vitesse quadratique moyenne d'un gaz ?
+R: $\sqrt{3RT/M}$.
+@ quiz
+Q: Les vibrations moléculaires de $\ce{N2}$ ne contribuent pas à $C_v$ à 300 K car :
++ $k_BT$ est très inférieur à l'écart entre niveaux vibrationnels
+- les molécules ne vibrent pas
+- elles contribuent pour $\frac12k_BT$
+E: Degré de liberté gelé (seul le fondamental est peuplé).
+
+=== Physique | Thermodynamique | Premier et second principes, machines
+@ preuve Premier principe industriel
+On choisit un système fermé : le fluide contenu dans la machine à $t$, plus la masse $\delta m$ sur le point d'entrer. À $t + dt$, c'est le fluide dans la machine plus $\delta m$ sorti. En régime stationnaire, $dE = \delta m(e_s - e_e)$. Le travail des forces de pression en amont et en aval vaut $\delta m(P_ev_e - P_sv_s)$ et s'ajoute au travail utile ; $u + Pv = h$ donne le résultat.
+
+
+=== Physique | Électromagnétisme | Électrostatique
+@ preuve Théorème de Gauss
+Pour une charge ponctuelle, le flux de $\frac{q}{4\pi\varepsilon_0r^2}\vec u_r$ à travers une surface fermée vaut $\frac{q}{4\pi\varepsilon_0}\Omega$ ($\Omega$ angle solide), soit $\frac{q}{\varepsilon_0}$ si la charge est intérieure et 0 sinon. On somme ensuite par superposition. Forme locale : Ostrogradski, $\iiint\mathrm{div}\vec E\,d\tau = \frac{1}{\varepsilon_0}\iiint\rho\,d\tau$ pour tout volume.
+@ preuve Équation de Poisson
+$\vec E = -\overrightarrow{\mathrm{grad}}V$ dans Maxwell-Gauss : $\mathrm{div}(-\overrightarrow{\mathrm{grad}}V) = -\Delta V = \frac{\rho}{\varepsilon_0}$.
+@ preuve Analogie gravitationnelle
+La force gravitationnelle $-\frac{Gmm'}{r^2}\vec u_r$ a la même forme que la force de Coulomb $\frac{qq'}{4\pi\varepsilon_0r^2}\vec u_r$ en remplaçant $q\to m$ et $\frac{1}{4\pi\varepsilon_0}\to-G$. Le théorème de Gauss se transpose : $\varepsilon_0\to-\frac{1}{4\pi G}$.
+@ formule Champ et potentiel d'une charge, superposition
+$\vec E(M) = \frac{q}{4\pi\varepsilon_0}\frac{\overrightarrow{PM}}{PM^3}$, $V(M) = \frac{q}{4\pi\varepsilon_0PM}$ (origine à l'infini). Pour une distribution : $\vec E = \sum\vec E_i$, $V = \sum V_i$, ou des intégrales avec $dq = \rho\,d\tau$, $\sigma\,dS$, $\lambda\,d\ell$. $\vec E = -\overrightarrow{\mathrm{grad}}V$ et $\oint\vec E\cdot d\vec\ell = 0$ (champ à circulation conservative).
+@ preuve
+Loi de Coulomb et principe de superposition. $-\overrightarrow{\mathrm{grad}}\frac1r = \frac{\vec u_r}{r^2}$. La circulation d'un gradient sur un contour fermé est nulle.
+@ formule Champs de référence (Gauss)
+Sphère de rayon $R$ chargée en volume ($\rho$ uniforme, charge $Q$) : $E = \frac{Qr}{4\pi\varepsilon_0R^3}$ à l'intérieur, $\frac{Q}{4\pi\varepsilon_0r^2}$ à l'extérieur. Sphère chargée en surface : 0 dedans. Fil infini ($\lambda$) : $E = \frac{\lambda}{2\pi\varepsilon_0r}$. Cylindre plein ($\rho$) : $E = \frac{\rho r}{2\varepsilon_0}$ dedans. Plan infini ($\sigma$) : $E = \frac{\sigma}{2\varepsilon_0}$ de chaque côté.
+@ preuve
+Symétries : champ radial ne dépendant que de $r$ (sphère, cylindre) ou champ normal au plan ne dépendant que de $|z|$. Surfaces de Gauss : sphère de rayon $r$ ($4\pi r^2E$), cylindre de rayon $r$ et de hauteur $h$ ($2\pi rhE$), cylindre traversant le plan ($2SE$). Charges intérieures : $Q\frac{r^3}{R^3}$, $\lambda h$, $\rho\pi r^2h$, $\sigma S$.
+@ formule Condensateur plan
+Armatures de surface $S$ distantes de $e$, charges $\pm Q$ : $E = \frac{\sigma}{\varepsilon_0}$ entre les armatures (nul à l'extérieur), $U = Ee$, $C = \frac{Q}{U} = \frac{\varepsilon_0S}{e}$ (multiplié par $\varepsilon_r$ avec un diélectrique). Énergie $\frac12CU^2 = \iiint\frac{\varepsilon_0E^2}{2}d\tau$.
+@ preuve
+Superposition de deux plans infinis de charges opposées : les champs s'ajoutent entre les armatures ($\frac{\sigma}{2\varepsilon_0} + \frac{\sigma}{2\varepsilon_0}$) et s'annulent à l'extérieur. L'énergie volumique $\frac{\varepsilon_0E^2}{2}$ multipliée par le volume $Se$ redonne $\frac12CU^2$.
+@ formule Dipôle électrostatique
+$\vec p = q\overrightarrow{NP}$. À grande distance ($r\gg a$) : $V = \frac{p\cos\theta}{4\pi\varepsilon_0r^2}$, $E_r = \frac{2p\cos\theta}{4\pi\varepsilon_0r^3}$, $E_\theta = \frac{p\sin\theta}{4\pi\varepsilon_0r^3}$. Dans un champ extérieur uniforme : résultante nulle, couple $\vec\Gamma = \vec p\wedge\vec E$, énergie $E_p = -\vec p\cdot\vec E$ (équilibre stable pour $\vec p$ et $\vec E$ dans le même sens). Champ non uniforme : le dipôle est attiré vers les champs forts.
+@ preuve
+$V = \frac{q}{4\pi\varepsilon_0}\left(\frac{1}{PM} - \frac{1}{NM}\right)$ avec $\frac{1}{PM}\approx\frac1r\left(1 + \frac{a\cos\theta}{2r}\right)$ ; puis $\vec E = -\overrightarrow{\mathrm{grad}}V$ en sphériques. Énergie : $qV(P) - qV(N)\approx q\overrightarrow{NP}\cdot\overrightarrow{\mathrm{grad}}V = -\vec p\cdot\vec E$.
+@ formule Énergie électrostatique
+Densité volumique $u_e = \frac{\varepsilon_0E^2}{2}$. Énergie d'interaction de deux charges : $\frac{q_1q_2}{4\pi\varepsilon_0r}$. Énergie d'une boule uniformément chargée : $\frac{3Q^2}{20\pi\varepsilon_0R}$.
+@ preuve
+On construit la distribution en apportant les charges depuis l'infini : le travail de l'opérateur vaut $\frac12\iiint\rho V\,d\tau$, que l'on réécrit $\iiint\frac{\varepsilon_0E^2}{2}d\tau$ par intégration par parties (Ostrogradski). Boule : $\int_0^\infty\frac{\varepsilon_0E^2}{2}4\pi r^2dr$ avec les champs ci-dessus.
+@ methode Choisir la méthode de calcul d'un champ électrostatique
+1. Forte symétrie (sphérique, cylindrique, plane) : théorème de Gauss.
+2. Symétrie insuffisante (spire, disque sur son axe) : intégration directe de $d\vec E$ ou de $dV$, en n'intégrant que la composante qui ne s'annule pas par symétrie.
+3. Superposition de distributions simples (cavité dans une boule : boule pleine $+\rho$ et petite boule $-\rho$).
+4. Potentiel connu : $\vec E = -\overrightarrow{\mathrm{grad}}V$ ; champ connu : $V$ par intégration, avec continuité de $V$.
+@ cartes
+Q: Champ à l'intérieur d'une boule uniformément chargée ?
+R: $E = \frac{\rho r}{3\varepsilon_0} = \frac{Qr}{4\pi\varepsilon_0R^3}$.
+Q: Couple exercé sur un dipôle électrostatique dans un champ uniforme ?
+R: $\vec\Gamma = \vec p\wedge\vec E$ : il tend à aligner $\vec p$ sur $\vec E$.
+Q: Densité d'énergie électrostatique ?
+R: $u_e = \frac{\varepsilon_0E^2}{2}$.
+Q: Le champ électrique est-il continu à la traversée d'une surface chargée ?
+R: Non : la composante normale saute de $\frac{\sigma}{\varepsilon_0}$ ; la composante tangentielle est continue.
+@ quiz
+Q: À grande distance, le champ d'un dipôle décroît en :
++ $1/r^3$
+- $1/r^2$
+- $1/r$
+E: Les champs des deux charges se compensent au premier ordre.
+Q: La capacité d'un condensateur plan double si :
++ on divise la distance entre armatures par 2
+- on double la tension
+- on double la distance
+E: $C = \varepsilon_0S/e$ ne dépend que de la géométrie.
+
+=== Physique | Électromagnétisme | Magnétostatique
+@ preuve Théorème d'Ampère
+On l'admet à partir de la forme locale de Maxwell-Ampère en régime stationnaire : $\overrightarrow{\mathrm{rot}}\vec B = \mu_0\vec j$. Le théorème de Stokes donne alors $\oint_C\vec B\cdot d\vec\ell = \iint_S\overrightarrow{\mathrm{rot}}\vec B\cdot d\vec S = \mu_0\iint_S\vec j\cdot d\vec S = \mu_0I_{\text{enl}}$. On le vérifie sur le fil infini : $\oint\frac{\mu_0I}{2\pi r}r\,d\theta = \mu_0I$.
+@ formule Champs de référence (Ampère)
+Fil infini : $B = \frac{\mu_0I}{2\pi r}\vec u_\theta$. Cylindre plein parcouru uniformément : $B = \frac{\mu_0Ir}{2\pi R^2}$ dedans. Solénoïde infini ($n$ spires/m) : $\vec B = \mu_0nI\vec u_z$ dedans, nul dehors. Bobine torique ($N$ spires) : $B = \frac{\mu_0NI}{2\pi r}$ dans le tore. Spire de rayon $R$ en son centre : $\frac{\mu_0I}{2R}$.
+@ preuve
+Symétries et invariances, puis contour d'Ampère : cercle d'axe le fil ($2\pi rB = \mu_0I_{\text{enl}}$) ; rectangle à cheval sur la paroi du solénoïde ($B_{\text{int}}L - B_{\text{ext}}L = \mu_0nLI$, avec $B_{\text{ext}} = 0$ à l'infini et $B_{\text{ext}}$ uniforme). Spire : par Biot et Savart, chaque élément donne $\frac{\mu_0I\,d\ell}{4\pi R^2}$ selon l'axe.
+@ formule Dipôle magnétique
+Moment d'une spire : $\vec m = IS\vec n$ (règle de la main droite). Champ à grande distance : même forme que le dipôle électrique avec $\frac{p}{4\pi\varepsilon_0}\to\frac{\mu_0m}{4\pi}$. Dans un champ extérieur uniforme : couple $\vec\Gamma = \vec m\wedge\vec B$, énergie $E_p = -\vec m\cdot\vec B$. Ordres de grandeur : champ terrestre $\approx5\times10^{-5}$ T, aimant permanent $\approx0{,}1$ à $1$ T.
+@ preuve
+Pour une spire rectangulaire dans $\vec B$ uniforme, les forces de Laplace sur les côtés opposés forment un couple, de moment $IabB\sin\alpha = mB\sin\alpha$. L'énergie s'obtient en intégrant le travail du couple : $-mB\cos\alpha$.
+@ formule Force et puissance de Laplace
+$d\vec F = I\,d\vec\ell\wedge\vec B$ ; tige rectiligne de longueur $\ell$ dans $\vec B$ uniforme : $\vec F = I\vec\ell\wedge\vec B$. Densité volumique : $\vec j\wedge\vec B$. Puissance sur une tige mobile à la vitesse $v$ : $P = \vec F\cdot\vec v$.
+@ preuve
+On somme la force de Lorentz $q\vec v_d\wedge\vec B$ sur les porteurs de charge : $n\,d\tau\,q\vec v_d\wedge\vec B = \vec j\wedge\vec B\,d\tau$, et $\vec j\,d\tau = I\,d\vec\ell$ pour un fil.
+@ formule Propriétés locales du champ magnétique
+$\mathrm{div}\vec B = 0$ : flux conservatif, lignes de champ fermées, $B$ plus intense là où les lignes se resserrent. $\overrightarrow{\mathrm{rot}}\vec B = \mu_0\vec j$ en statique. Les lignes de champ tournent autour des courants ; au voisinage d'un point où $\vec j = 0$, il n'y a pas de tourbillon.
+@ preuve
+Équations de Maxwell en régime stationnaire. Un tube de champ a un flux constant : $B_1S_1 = B_2S_2$ (Ostrogradski sur une surface fermée constituée du tube et de deux sections).
+@ methode Exploiter une carte de champ magnétique
+1. Les sources sont là où les lignes tournent autour d'un point (courant perpendiculaire à la carte) ; le sens du courant se donne par la main droite.
+2. Le champ est intense là où les lignes sont serrées.
+3. Les plans de symétrie des courants sont orthogonaux aux lignes de champ ; les plans d'antisymétrie les contiennent.
+@ cartes
+Q: Champ à l'intérieur d'un tore de $N$ spires ?
+R: $B = \frac{\mu_0NI}{2\pi r}$.
+Q: Moment magnétique d'une spire ?
+R: $\vec m = IS\vec n$.
+Q: Couple subi par un moment magnétique dans un champ uniforme ?
+R: $\vec\Gamma = \vec m\wedge\vec B$ (il tend à aligner $\vec m$ sur $\vec B$).
+Q: Ordre de grandeur du champ magnétique terrestre ?
+R: $5\times10^{-5}$ T.
+@ quiz
+Q: Sur une carte de champ, les lignes de $\vec B$ sont plus resserrées en $A$ qu'en $B$. Donc :
++ $\|\vec B(A)\|>\|\vec B(B)\|$
+- $\|\vec B(A)\|<\|\vec B(B)\|$
+- on ne peut rien dire
+E: Conservation du flux dans un tube de champ.
+
+=== Physique | Électromagnétisme | Équations de Maxwell et énergie électromagnétique
+@ preuve Équation locale de Poynting
+On calcule $\mathrm{div}(\vec E\wedge\vec B) = \vec B\cdot\overrightarrow{\mathrm{rot}}\vec E - \vec E\cdot\overrightarrow{\mathrm{rot}}\vec B$. Avec Maxwell-Faraday et Maxwell-Ampère : $= -\vec B\cdot\partial_t\vec B - \mu_0\vec j\cdot\vec E - \mu_0\varepsilon_0\vec E\cdot\partial_t\vec E$. En divisant par $\mu_0$ : $\mathrm{div}\vec\Pi = -\frac{\partial}{\partial t}\left(\frac{B^2}{2\mu_0} + \frac{\varepsilon_0E^2}{2}\right) - \vec j\cdot\vec E$.
+@ preuve Forme intégrale de Maxwell-Faraday (loi de Faraday)
+On intègre $\overrightarrow{\mathrm{rot}}\vec E = -\partial_t\vec B$ sur une surface fixe $S$ s'appuyant sur $C$ : par le théorème de Stokes, $\oint_C\vec E\cdot d\vec\ell = -\iint_S\partial_t\vec B\cdot d\vec S = -\frac{d}{dt}\iint_S\vec B\cdot d\vec S$ (la surface étant fixe).
+@ thm Conservation de la charge
+$\frac{\partial\rho}{\partial t} + \mathrm{div}\vec j = 0$ : la charge contenue dans un volume ne varie que par le courant qui en sort. Elle est contenue dans les équations de Maxwell, grâce au terme de courant de déplacement.
+@ preuve
+On prend la divergence de Maxwell-Ampère : $0 = \mu_0\mathrm{div}\vec j + \mu_0\varepsilon_0\partial_t\mathrm{div}\vec E$, puis on utilise Maxwell-Gauss $\mathrm{div}\vec E = \frac{\rho}{\varepsilon_0}$ ($\mathrm{div}\,\overrightarrow{\mathrm{rot}} = 0$).
+@ formule Potentiels électromagnétiques
+$\vec B = \overrightarrow{\mathrm{rot}}\vec A$ et $\vec E = -\overrightarrow{\mathrm{grad}}V - \frac{\partial\vec A}{\partial t}$. En régime stationnaire, on retrouve $\vec E = -\overrightarrow{\mathrm{grad}}V$.
+@ preuve
+$\mathrm{div}\vec B = 0$ assure l'existence de $\vec A$ (admis). Maxwell-Faraday donne $\overrightarrow{\mathrm{rot}}(\vec E + \partial_t\vec A) = \vec0$, donc $\vec E + \partial_t\vec A$ est un gradient.
+@ formule ARQS et loi d'Ohm locale
+ARQS magnétique : on néglige le courant de déplacement devant $\mu_0\vec j$ lorsque la taille du système est très petite devant $c\,T$. Alors $\overrightarrow{\mathrm{rot}}\vec B = \mu_0\vec j$ et $\mathrm{div}\vec j = 0$ (intensité conservée dans une branche). Loi d'Ohm locale : $\vec j = \gamma\vec E$ ; résistance d'un fil $R = \frac{L}{\gamma S}$ ; puissance Joule volumique $\vec j\cdot\vec E = \frac{j^2}{\gamma}$.
+@ preuve
+Ordre de grandeur : $\frac{\varepsilon_0\partial_tE}{j}$ est petit devant 1 si les temps caractéristiques sont grands devant le temps de propagation $L/c$. Pour un fil : $U = EL$ et $I = jS = \gamma ES$, d'où $R = \frac{U}{I}$.
+@ methode Établir l'équation de propagation à partir des équations de Maxwell
+1. Prendre le rotationnel de Maxwell-Faraday : $\overrightarrow{\mathrm{rot}}(\overrightarrow{\mathrm{rot}}\vec E) = -\partial_t\overrightarrow{\mathrm{rot}}\vec B$.
+2. Utiliser $\overrightarrow{\mathrm{rot}}\,\overrightarrow{\mathrm{rot}} = \overrightarrow{\mathrm{grad}}\,\mathrm{div} - \Delta$ et $\mathrm{div}\vec E = \frac{\rho}{\varepsilon_0}$.
+3. Remplacer $\overrightarrow{\mathrm{rot}}\vec B$ par Maxwell-Ampère.
+4. Dans le vide : $\Delta\vec E - \frac{1}{c^2}\partial_t^2\vec E = \vec0$.
+@ cartes
+Q: Relation entre $\vec E$ et les potentiels en régime variable ?
+R: $\vec E = -\overrightarrow{\mathrm{grad}}V - \partial_t\vec A$.
+Q: Loi d'Ohm locale ?
+R: $\vec j = \gamma\vec E$.
+Q: Résistance d'un fil de longueur $L$ et de section $S$ ?
+R: $R = \frac{L}{\gamma S}$.
+Q: Condition de l'ARQS ?
+R: Dimension du système très petite devant la longueur d'onde $cT$.
+@ quiz
+Q: En régime variable, le champ électrique est-il toujours un gradient ?
+- oui
++ non
+E: $\overrightarrow{\mathrm{rot}}\vec E = -\partial_t\vec B\neq\vec0$ : il y a une partie $-\partial_t\vec A$.
+
+=== Physique | Électromagnétisme | Induction électromagnétique
+@ preuve Loi de Faraday
+Circuit fixe dans un champ variable : on intègre Maxwell-Faraday sur la surface du circuit (champ électromoteur $\vec E_m = -\partial_t\vec A$). Circuit mobile dans un champ stationnaire : la force de Lorentz $q\vec v\wedge\vec B$ sur les porteurs donne le champ électromoteur $\vec v\wedge\vec B$, dont la circulation vaut $-\frac{d\Phi}{dt}$ (flux coupé). Les deux cas se résument par la même loi.
+@ preuve Bilan de puissance électromécanique
+Barre sur des rails : la f.é.m. vaut $e = \oint(\vec v\wedge\vec B)\cdot d\vec\ell = -vB\ell$ (avec l'orientation choisie) et la force de Laplace $\vec F = i\vec\ell\wedge\vec B$ a pour puissance $\vec F\cdot\vec v = iB\ell v$ au signe près. Les signes sont opposés : $P_L + ei = 0$. Cette identité est générale (la force de Lorentz totale ne travaille pas).
+@ formule Inductance propre et mutuelle
+$\Phi_{\text{propre}} = Li$, $L>0$ ; solénoïde : $L = \mu_0\frac{N^2S}{\ell}$. Mutuelle : $\Phi_{2\leftarrow1} = Mi_1$, $\Phi_{1\leftarrow2} = Mi_2$ (même $M$), $|M|\leqslant\sqrt{L_1L_2}$. Équations couplées : $u_1 = R_1i_1 + L_1\frac{di_1}{dt} + M\frac{di_2}{dt}$. Énergie magnétique : $\frac12L_1i_1^2 + Mi_1i_2 + \frac12L_2i_2^2$.
+@ preuve
+Solénoïde : $B = \mu_0\frac N\ell i$, flux à travers $N$ spires : $\Phi = NBS$. Égalité des mutuelles (admise, formule de Neumann). Énergie : $\int(u_1i_1 + u_2i_2)\,dt$ sans les termes résistifs ; sa positivité donne $M^2\leqslant L_1L_2$.
+@ formule Rails de Laplace
+Barre de masse $m$, longueur $\ell$, sur des rails dans un champ $B$ uniforme normal, circuit de résistance $R$ : $e = B\ell v$, $i = \frac{B\ell v}{R}$, force freinante $-\frac{B^2\ell^2}{R}v$, donc $v = v_0e^{-t/\tau}$ avec $\tau = \frac{mR}{B^2\ell^2}$. L'énergie cinétique initiale est intégralement dissipée par effet Joule.
+@ preuve
+Électrique : $Ri = e$. Mécanique : $m\dot v = -iB\ell$. On combine : $m\dot v = -\frac{B^2\ell^2}{R}v$. Énergie : $\int Ri^2dt = \int\frac{B^2\ell^2v^2}{R}dt = -\int mv\dot v\,dt = \frac12mv_0^2$.
+@ formule Transformateur idéal
+$\frac{u_2}{u_1} = \frac{N_2}{N_1} = -\frac{i_1}{i_2}$ (avec les conventions usuelles) ; conservation de la puissance $u_1i_1 = -u_2i_2$ (aux signes près selon l'orientation). Il permet d'adapter les tensions (lignes à haute tension : moins de pertes Joule).
+@ preuve
+Le même flux $\varphi$ traverse chaque spire (circuit magnétique parfait) : $u_1 = N_1\frac{d\varphi}{dt}$ et $u_2 = N_2\frac{d\varphi}{dt}$. Circuit magnétique de réluctance nulle : $N_1i_1 + N_2i_2 = 0$.
+@ formule Haut-parleur et moteur à courant continu
+Haut-parleur : bobine de longueur $\ell$ dans un champ radial $B$, f.é.m. $e = -B\ell v$ et force $Bi\ell$ ; équations couplées $u = Ri + L\frac{di}{dt} + B\ell v$ et $m\dot v = -kx - \alpha v + B\ell i$. Moteur : $\Gamma = \Phi_0i$ et $e = \Phi_0\omega$ ; même constante de couplage.
+@ preuve
+Force de Laplace sur les spires dans un champ radial : $\vec F = i\ell B$ selon l'axe. Le champ électromoteur $\vec v\wedge\vec B$ circule le long du fil. On écrit la loi des mailles et le PFD ; le bilan $ei + P_L = 0$ fixe les signes.
+@ methode Choisir l'orientation et vérifier avec la loi de Lenz
+1. Orienter le circuit ; la normale $\vec n$ s'en déduit par la règle de la main droite.
+2. Flux $\Phi = \vec B\cdot\vec nS$ ; $e = -\frac{d\Phi}{dt}$ en convention générateur, dans le sens de l'orientation.
+3. Vérifier que le courant induit crée un champ qui s'oppose à la variation de flux, ou que la force de Laplace freine le mouvement.
+@ cartes
+Q: Constante de temps du freinage d'une barre sur des rails de Laplace ?
+R: $\tau = \frac{mR}{B^2\ell^2}$.
+Q: Majoration de l'inductance mutuelle ?
+R: $|M|\leqslant\sqrt{L_1L_2}$.
+Q: Énergie magnétique de deux circuits couplés ?
+R: $\frac12L_1i_1^2 + Mi_1i_2 + \frac12L_2i_2^2$.
+Q: Relations couple / f.é.m. d'un moteur à courant continu ?
+R: $\Gamma = \Phi_0i$ et $e = \Phi_0\omega$.
+@ quiz
+Q: Un transformateur idéal de rapport $N_2/N_1 = 10$ alimenté en 230 V délivre :
++ 2 300 V et un courant 10 fois plus faible
+- 23 V
+- 2 300 V et un courant 10 fois plus fort
+E: Conservation de la puissance.
+Q: Un transformateur fonctionne-t-il en continu ?
+- oui
++ non
+E: Il faut une variation de flux : $u = N\,d\varphi/dt$.
+
+=== Physique | Ondes | Ondes mécaniques et équation de d'Alembert
+@ preuve Modes propres d'une corde fixée
+On cherche des solutions stationnaires $y = f(x)g(t)$ : $\frac{f''}{f} = \frac{g''}{c^2g} = -k^2$, donc $f = A\sin kx + B\cos kx$. $y(0,t) = 0$ impose $B = 0$ ; $y(L,t) = 0$ impose $\sin kL = 0$, soit $k_n = \frac{n\pi}{L}$ et $\omega_n = ck_n$, d'où $f_n = \frac{nc}{2L}$.
+@ thm Solution générale de l'équation de d'Alembert
+Les solutions de $\frac{\partial^2y}{\partial t^2} = c^2\frac{\partial^2y}{\partial x^2}$ sont les $y = f(x - ct) + g(x + ct)$ : superposition d'ondes progressives dans le sens des $x$ croissants et décroissants, de célérité $c$ et sans déformation.
+@ preuve
+Changement de variables $u = x - ct$, $v = x + ct$ : l'équation devient $\frac{\partial^2y}{\partial u\,\partial v} = 0$. On intègre par rapport à $v$ ($\frac{\partial y}{\partial u} = F(u)$), puis par rapport à $u$.
+@ formule Ondes progressives harmoniques
+$y = A\cos(\omega t - kx + \varphi)$ : $k = \frac{2\pi}{\lambda}$, $\omega = \frac{2\pi}{T}$, $\lambda = cT$, $v_\varphi = \frac\omega k$. Retard temporel : $y(x,t) = y(0,t - x/c)$ ; déphasage entre deux points distants de $d$ : $\Delta\varphi = \frac{2\pi d}{\lambda}$.
+@ preuve
+On reporte $\cos(\omega t - kx)$ dans l'équation de d'Alembert : $-\omega^2 = -c^2k^2$ (relation de dispersion d'un milieu non dispersif).
+@ formule Célérités usuelles
+Corde : $c = \sqrt{\frac T\mu}$. Son dans un gaz parfait : $c = \sqrt{\frac{\gamma RT}{M}}\approx340$ m/s dans l'air à 20 °C ; dans l'eau : environ 1 500 m/s. Câble coaxial : $c = \frac{1}{\sqrt{\Lambda\Gamma}}$ ($\Lambda$ et $\Gamma$ : inductance et capacité linéiques).
+@ preuve
+Corde : PFD sur un élément (voir la méthode). Câble : lois des mailles et des nœuds sur une cellule $\Lambda\,dx$, $\Gamma\,dx$ : $\partial_xu = -\Lambda\partial_ti$ et $\partial_xi = -\Gamma\partial_tu$, d'où $\partial_x^2u = \Lambda\Gamma\partial_t^2u$.
+@ formule Ondes stationnaires et superposition
+$A\cos(\omega t - kx) + A\cos(\omega t + kx) = 2A\cos(kx)\cos(\omega t)$ : nœuds en $kx = \frac\pi2 + n\pi$ (espacés de $\frac\lambda2$), ventres en $kx = n\pi$. Corde de Melde, corde de guitare : la fréquence du fondamental est $f_1 = \frac{1}{2L}\sqrt{\frac T\mu}$, et le timbre dépend des harmoniques présentes.
+@ preuve
+Formule $\cos a + \cos b = 2\cos\frac{a+b}{2}\cos\frac{a-b}{2}$. Les modes propres découlent des conditions aux limites (nœuds aux extrémités fixes).
+@ formule Interférences de deux ondes et diffraction
+Deux sources cohérentes en phase : amplitude maximale si $\delta = d_2 - d_1 = n\lambda$, minimale si $\delta = \left(n + \frac12\right)\lambda$. Diffraction par une ouverture de taille $a$ : demi-angle d'ouverture $\sin\theta\approx\frac\lambda a$ ; elle est notable si $a\lesssim\lambda$ (quelques $\lambda$).
+@ preuve
+$s = A\cos(\omega t - kd_1) + A\cos(\omega t - kd_2)$, d'amplitude $2A\left|\cos\frac{k(d_2 - d_1)}{2}\right|$. Diffraction : relation admise (principe de Huygens-Fresnel), justifiée qualitativement par les interférences entre les ondelettes issues de l'ouverture.
+@ formule Intensité sonore, décibels et Doppler
+Niveau $L = 10\log\frac{I}{I_0}$ avec $I_0 = 10^{-12}$ W·m⁻² ; source ponctuelle isotrope : $I = \frac{P}{4\pi r^2}$ (−6 dB quand la distance double). Effet Doppler : source se rapprochant à $v_s$ : $f' = \frac{f}{1 - v_s/c}$ ; récepteur se rapprochant à $v_r$ : $f' = f\left(1 + \frac{v_r}{c}\right)$.
+@ preuve
+La puissance se répartit sur une sphère de surface $4\pi r^2$. Doppler (source mobile) : deux crêtes successives sont émises à $T$ d'intervalle, mais la seconde parcourt $cT - v_sT$ de moins, donc elles arrivent séparées de $T' = T\left(1 - \frac{v_s}{c}\right)$.
+@ formule Réflexion et impédance
+Impédance caractéristique : corde $Z = \sqrt{T\mu}$, câble $Z_c = \sqrt{\frac{\Lambda}{\Gamma}}$ (50 Ω typiquement), acoustique $Z = \rho c$. À une jonction : $r = \frac{Z_1 - Z_2}{Z_1 + Z_2}$ et $t = \frac{2Z_1}{Z_1 + Z_2}$ (pour le déplacement transversal d'une corde, ou la tension d'un câble avec les admittances). Un câble fermé sur $Z_c$ n'a pas d'onde réfléchie (adaptation d'impédance).
+@ preuve
+On écrit $y_i + y_r = y_t$ (continuité) et la continuité de la force transversale $-T\partial_xy$ à la jonction ; pour une onde progressive, $\partial_xy = \mp\frac1c\partial_ty$ fait apparaître $Z$. On résout le système de deux équations.
+@ methode Analyser une onde à partir d'une représentation
+1. Photographie (à $t$ fixé) : on lit $\lambda$. Chronogramme (à $x$ fixé) : on lit $T$.
+2. Sens de propagation : comparer deux instants, ou deux points (le point en aval est en retard).
+3. Onde stationnaire : les points vibrent en phase ou en opposition, avec une amplitude dépendant de $x$ ; onde progressive : même amplitude partout, phase qui varie.
+@ cartes
+Q: Solution générale de l'équation de d'Alembert ?
+R: $f(x - ct) + g(x + ct)$.
+Q: Vitesse du son dans l'eau ?
+R: Environ 1 500 m/s.
+Q: Diminution du niveau sonore quand la distance à une source ponctuelle double ?
+R: Environ 6 dB.
+Q: Condition de diffraction notable ?
+R: Ouverture de taille comparable à $\lambda$ ; ouverture angulaire $\theta\sim\lambda/a$.
+Q: Impédance caractéristique d'un câble coaxial ?
+R: $Z_c = \sqrt{\Lambda/\Gamma}$.
+@ quiz
+Q: Une ambulance s'approche : le son perçu est :
++ plus aigu que le son émis
+- plus grave
+- identique
+E: Effet Doppler : $f' = f/(1 - v_s/c)>f$.
+Q: Deux haut-parleurs en phase à 680 Hz : un auditeur entend un minimum si la différence de marche vaut :
++ 25 cm
+- 50 cm
+- 1 m
+E: $\lambda = 340/680 = 50$ cm, minimum pour $\delta = \lambda/2$.
+
+=== Physique | Ondes | Ondes électromagnétiques
+@ preuve Relations de passage
+Gauss sur un cylindre aplati de part et d'autre de la surface : $(E_{2n} - E_{1n})S = \frac{\sigma S}{\varepsilon_0}$. Circulation de $\vec E$ sur un rectangle aplati : composante tangentielle continue ($\partial_t\vec B$ est borné et la surface du rectangle tend vers 0). Pour $\vec B$ : flux nul (composante normale continue) et théorème d'Ampère sur un rectangle aplati, qui enlace le courant surfacique $j_sL$.
+@ preuve Relation de structure de l'OPPM dans le vide
+En complexes, $\overrightarrow{\mathrm{rot}}\to-j\vec k\wedge$ et $\partial_t\to j\omega$. Maxwell-Faraday donne $-j\vec k\wedge\underline{\vec E} = -j\omega\underline{\vec B}$, donc $\vec B = \frac{\vec k\wedge\vec E}{\omega} = \frac{\vec u\wedge\vec E}{c}$. Maxwell-Gauss dans le vide donne $\vec k\cdot\vec E = 0$ : l'onde est transverse.
+@ thm Équation de propagation dans le vide
+Dans le vide, $\vec E$ et $\vec B$ vérifient l'équation de d'Alembert $\Delta\vec E - \frac{1}{c^2}\frac{\partial^2\vec E}{\partial t^2} = \vec0$ avec $c = \frac{1}{\sqrt{\mu_0\varepsilon_0}}$.
+@ preuve
+$\overrightarrow{\mathrm{rot}}(\overrightarrow{\mathrm{rot}}\vec E) = \overrightarrow{\mathrm{grad}}(\mathrm{div}\vec E) - \Delta\vec E = -\Delta\vec E$ (car $\rho = 0$), et $\overrightarrow{\mathrm{rot}}(-\partial_t\vec B) = -\mu_0\varepsilon_0\partial_t^2\vec E$ (car $\vec j = 0$). De même pour $\vec B$.
+@ formule Énergie et intensité d'une OPPM
+$u = \varepsilon_0E^2$ (énergies électrique et magnétique égales), $\vec\Pi = \frac{E^2}{\mu_0c}\vec u = uc\,\vec u$ ; en moyenne : $\langle\Pi\rangle = \frac{\varepsilon_0cE_0^2}{2}$. Rayonnement solaire au sol : environ 1 kW/m² ; laser de 1 mW sur 1 mm² : environ 1 kW/m².
+@ preuve
+$B = \frac Ec$, donc $\frac{B^2}{2\mu_0} = \frac{E^2}{2\mu_0c^2} = \frac{\varepsilon_0E^2}{2}$. $\vec\Pi = \frac{\vec E\wedge(\vec u\wedge\vec E)}{\mu_0c} = \frac{E^2}{\mu_0c}\vec u$, et $\langle\cos^2\rangle = \frac12$.
+@ formule Polarisation
+Polarisation rectiligne : $\vec E$ garde une direction fixe. Circulaire : deux composantes de même amplitude en quadrature, dont l'extrémité décrit un cercle (droite ou gauche selon le sens de rotation vu par un observateur qui reçoit l'onde). Elliptique dans le cas général. Loi de Malus : un polariseur transmet $I = I_0\cos^2\theta$.
+@ preuve
+$\vec E = E_{0x}\cos(\omega t - kz)\vec u_x + E_{0y}\cos(\omega t - kz - \varphi)\vec u_y$ : en $z$ fixé, c'est une courbe paramétrée, segment si $\varphi = 0$ ou $\pi$, ellipse sinon, cercle si $E_{0x} = E_{0y}$ et $\varphi = \pm\frac\pi2$. Malus : seule la composante $E_0\cos\theta$ est transmise, et l'intensité est proportionnelle à son carré.
+@ formule Plasma dilué
+Modèle : électrons libres, ions immobiles, collisions négligées. $\underline{\vec j} = \underline\gamma\underline{\vec E}$ avec $\underline\gamma = \frac{ne^2}{jm\omega}$ (imaginaire pur : puissance moyenne nulle). Relation de dispersion $k^2 = \frac{\omega^2 - \omega_p^2}{c^2}$, $\omega_p = \sqrt{\frac{ne^2}{m\varepsilon_0}}$. Pour $\omega>\omega_p$ : $v_\varphi = \frac{c}{\sqrt{1 - \omega_p^2/\omega^2}}>c$ et $v_g = c\sqrt{1 - \omega_p^2/\omega^2}<c$.
+@ preuve
+PFD sur un électron (la force magnétique est négligeable car $v\ll c$) : $mj\omega\underline{\vec v} = -e\underline{\vec E}$, et $\vec j = -ne\vec v$. Dans l'équation de propagation : $\Delta\vec E - \frac{1}{c^2}\partial_t^2\vec E = \mu_0\partial_t\vec j$, d'où $-k^2 + \frac{\omega^2}{c^2} = \mu_0j\omega\underline\gamma = \frac{\omega_p^2}{c^2}$. Enfin $v_g = \frac{d\omega}{dk}$ : on dérive $\omega^2 = \omega_p^2 + k^2c^2$, ce qui donne $\omega\,d\omega = c^2k\,dk$, donc $v_gv_\varphi = c^2$.
+@ formule Conducteur ohmique et effet de peau
+En basse fréquence ($\omega\ll\frac\gamma{\varepsilon_0}$), on néglige le courant de déplacement : $\Delta\vec E = \mu_0\gamma\partial_t\vec E$ (équation de diffusion). Onde amortie $\vec E = E_0e^{-z/\delta}\cos(\omega t - z/\delta)\vec u_x$ avec $\delta = \sqrt{\frac{2}{\mu_0\gamma\omega}}$ (cuivre : 9 mm à 50 Hz, 7 µm à 100 MHz). Conducteur parfait ($\gamma\to\infty$) : champs nuls à l'intérieur.
+@ preuve
+$k^2 = -j\mu_0\gamma\omega$, donc $k = \frac{1 - j}{\delta}$ (racine choisie pour que l'onde s'atténue dans le sens de propagation). Le courant de déplacement est négligeable si $\varepsilon_0\omega E\ll\gamma E$.
+@ formule Réflexion sur un conducteur parfait
+Onde incidente normale $E_0\cos(\omega t - kz)\vec u_x$ sur un plan conducteur parfait en $z = 0$ : onde réfléchie $-E_0\cos(\omega t + kz)\vec u_x$, onde résultante stationnaire $2E_0\sin(kz)\sin(\omega t)\vec u_x$ (nœud de $\vec E$ sur le plan, ventre de $\vec B$). Il y a des courants surfaciques et une pression de radiation. Cavité de longueur $L$ : modes $L = n\frac\lambda2$.
+@ preuve
+La continuité de la composante tangentielle de $\vec E$ en $z = 0$ (champ nul dans le conducteur) impose une onde réfléchie d'amplitude opposée. On somme les deux ondes ; $\vec B$ réfléchi se déduit de la relation de structure avec $\vec u = -\vec u_z$.
+@ formule Paquet d'ondes et vitesse de groupe
+Un paquet d'ondes de pulsations proches de $\omega_0$ se propage (enveloppe) à la vitesse de groupe $v_g = \frac{d\omega}{dk}\Big|_{\omega_0}$, qui est la vitesse de propagation de l'énergie et de l'information ; la phase se propage à $v_\varphi = \frac\omega k$. Milieu non dispersif : $v_g = v_\varphi$. Absorption : partie imaginaire de $k$.
+@ preuve
+Superposition de deux ondes $\cos(\omega_1t - k_1z) + \cos(\omega_2t - k_2z) = 2\cos\left(\frac{\Delta\omega}{2}t - \frac{\Delta k}{2}z\right)\cos(\bar\omega t - \bar kz)$ : l'enveloppe avance à $\frac{\Delta\omega}{\Delta k}\to\frac{d\omega}{dk}$.
+@ methode Étudier une OPPM dans un milieu
+1. Modéliser le courant ($\vec j = \underline\gamma\vec E$ : Drude, Ohm, plasma) et la charge (souvent $\rho = 0$ pour une onde transverse).
+2. Établir l'équation de propagation, y injecter l'OPPM, en déduire $\underline k^2(\omega)$.
+3. Interpréter : $k$ réel → propagation (dispersive ou non) ; $k$ imaginaire pur → onde évanescente ; $k$ complexe → propagation atténuée (longueur caractéristique $1/|k''|$).
+4. Calculer $v_\varphi$, $v_g$, $\langle\vec\Pi\rangle$.
+@ cartes
+Q: Pulsation plasma ?
+R: $\omega_p = \sqrt{\frac{ne^2}{m\varepsilon_0}}$.
+Q: Énergie volumique d'une OPPM dans le vide ?
+R: $u = \varepsilon_0E^2$, également répartie entre électricité et magnétisme.
+Q: Loi de Malus ?
+R: $I = I_0\cos^2\theta$.
+Q: Onde résultante devant un miroir métallique parfait ?
+R: Onde stationnaire, avec un nœud de $\vec E$ sur le miroir.
+Q: Vitesse de propagation de l'énergie d'un paquet d'ondes ?
+R: La vitesse de groupe $d\omega/dk$.
+@ quiz
+Q: L'ionosphère réfléchit les ondes radio de basse fréquence car :
++ leur pulsation est inférieure à la pulsation plasma
+- elles sont absorbées par collisions
+- elles sont polarisées
+E: $k^2<0$ : onde évanescente, donc réflexion totale.
+Q: Dans un plasma, la vitesse de phase est :
++ supérieure à $c$, sans contredire la relativité
+- inférieure à $c$
+- égale à $c$
+E: L'information se propage à $v_g<c$.
+
+=== Physique | Optique | Optique ondulatoire : interférences
+@ preuve Formule de Fresnel
+$s = s_1 + s_2$ avec $s_i = a_i\cos(\omega t - \varphi_i)$. $I\propto\langle s^2\rangle = \frac{a_1^2}{2} + \frac{a_2^2}{2} + 2a_1a_2\langle\cos(\omega t - \varphi_1)\cos(\omega t - \varphi_2)\rangle$, et ce dernier terme moyen vaut $\frac12\cos(\varphi_2 - \varphi_1)$. Pour des sources incohérentes, $\varphi_2 - \varphi_1$ varie aléatoirement et le terme d'interférence s'annule en moyenne.
+@ preuve Réseau
+Deux traits voisins, distants de $a$, donnent une différence de marche $\delta = a(\sin\theta - \sin\theta_0)$ (projection sur les rayons incident et diffracté). Les $N$ ondes sont toutes en phase si $\delta = p\lambda$ ; sinon, la somme des $N$ phaseurs est quasi nulle pour $N$ grand : les pics sont très fins (de largeur relative en $\frac1N$).
+@ formule Chemin optique et surfaces d'onde
+$(SM) = \int_S^Mn\,ds$, déphasage $\varphi = \frac{2\pi(SM)}{\lambda_0}$. Théorème de Malus : après un système optique, les rayons restent orthogonaux aux surfaces d'onde (surfaces d'égal chemin optique). Une lentille n'introduit pas de différence de marche entre deux rayons qui relient deux points conjugués. Réflexion sur un métal ou sur un milieu plus réfringent : déphasage supplémentaire de $\pi$ ($\frac\lambda2$).
+@ preuve
+Le chemin optique est le temps de parcours multiplié par $c$. Théorème de Malus : admis. Stigmatisme : tous les rayons de $A$ à $A'$ ont le même chemin optique (principe de Fermat).
+@ formule Trous (fentes) d'Young
+Sources secondaires distantes de $a$, écran à $D\gg a$ : $\delta = \frac{ax}{D}$, interfrange $i = \frac{\lambda D}{a}$. Avec une lentille de focale $f'$ (observation dans son plan focal) : $i = \frac{\lambda f'}{a}$. Une lame d'épaisseur $e$ et d'indice $n$ sur un trajet décale les franges de $\frac{(n-1)eD}{a}$.
+@ preuve
+$S_2M - S_1M = \sqrt{D^2 + (x + a/2)^2} - \sqrt{D^2 + (x - a/2)^2}\approx\frac{ax}{D}$ (DL au premier ordre). Les franges brillantes sont en $\delta = p\lambda$. La lame ajoute $(n - 1)e$ au chemin optique.
+@ formule Interféromètre de Michelson
+Lame d'air d'épaisseur $e$ (miroirs perpendiculaires, source étendue) : $\delta = 2e\cos i$, anneaux localisés à l'infini ; rayon du $k$-ième anneau brillant compté à partir du centre (lentille de focale $f'$) : $r_k\approx f'\sqrt{\frac{\lambda}{e}(k - k_0)}$. Quand $e$ diminue, les anneaux rentrent vers le centre. Coin d'air d'angle $\alpha$ (éclairage quasi parallèle) : $\delta\approx2\alpha x$, franges rectilignes localisées au voisinage des miroirs, d'interfrange $\frac{\lambda}{2\alpha}$.
+@ preuve
+Le miroir $M_2$ et l'image de $M_1$ par la séparatrice forment une lame d'air. Pour une incidence $i$, la différence de marche entre les deux faces vaut $2e\cos i$ (géométrie de la lame). Anneaux : $2e\left(1 - \frac{i^2}{2}\right) = p\lambda$ avec $r = f'i$. Coin : l'épaisseur locale est $\alpha x$, aller-retour : $2\alpha x$.
+@ formule Cohérence temporelle et doublet
+Source de largeur spectrale $\Delta\nu$ : longueur de cohérence $\ell_c = \frac{c}{\Delta\nu} = \frac{\lambda^2}{\Delta\lambda}$ ; les franges se brouillent pour $|\delta|\gtrsim\ell_c$ (lampe spectrale : quelques mm ; laser : de quelques dizaines de cm à des km ; lumière blanche : environ 1 µm, d'où un blanc d'ordre supérieur). Doublet $\lambda_1$, $\lambda_2$ : $I = 2I_0\left[1 + \cos\left(\frac{\pi\Delta\lambda\,\delta}{\lambda^2}\right)\cos\left(\frac{2\pi\delta}{\lambda}\right)\right]$, de contraste nul pour $\delta = \left(m + \frac12\right)\frac{\lambda^2}{\Delta\lambda}$ (anticoïncidences).
+@ preuve
+On somme les intensités des deux longueurs d'onde (incohérentes entre elles), puis on factorise $\cos a + \cos b$ : le terme lent (enveloppe) module le contraste. Pour une raie de largeur $\Delta\nu$, le brouillage apparaît lorsque l'écart d'ordre entre ses extrémités, $\frac{\delta\Delta\nu}{c}$, atteint 1.
+@ formule Cohérence spatiale
+Une source étendue de largeur $b$ éclairant des trous d'Young distants de $a$ à la distance $d$ : les systèmes de franges se décalent et se brouillent quand $\frac{ab}{d}\gtrsim\lambda$. On peut donc mesurer le diamètre angulaire d'une étoile ($\theta\approx\frac{\lambda}{a}$ au premier brouillage). Le Michelson en lame d'air n'est pas sensible à l'étendue de la source (franges localisées à l'infini).
+@ preuve
+Un point source décalé de $y$ crée une différence de marche supplémentaire $\frac{ay}{d}$ avant les trous. On intègre les intensités sur la largeur de la source : le terme d'interférence est multiplié par un sinus cardinal, $\mathrm{sinc}\left(\frac{\pi ab}{\lambda d}\right)$, qui s'annule pour $\frac{ab}{d} = \lambda$.
+@ methode Exploiter un interféromètre de Michelson
+1. Identifier la configuration : lame d'air (anneaux à l'infini, observation au foyer d'une lentille) ou coin d'air (franges d'égale épaisseur, image des miroirs projetée).
+2. Différence de marche : $2e\cos i$ ou $2\alpha x$.
+3. Compter les anneaux qui défilent au centre lors d'un déplacement $\Delta e$ du miroir : $N = \frac{2\Delta e}{\lambda}$ (mesure de $\lambda$ ou de $\Delta e$).
+4. Interpréter un brouillage périodique (doublet) ou progressif (largeur spectrale).
+@ cartes
+Q: Nombre d'anneaux qui défilent au centre pour un déplacement $\Delta e$ du miroir mobile ?
+R: $N = \frac{2\Delta e}{\lambda}$.
+Q: Rayon des anneaux d'un Michelson en lame d'air ?
+R: $r\propto\sqrt{k - k_0}$ : les anneaux se resserrent en s'éloignant du centre.
+Q: Décalage des franges d'Young par une lame d'indice $n$ et d'épaisseur $e$ ?
+R: $\frac{(n-1)eD}{a}$, du côté de la lame.
+Q: Longueur de cohérence de la lumière blanche ?
+R: De l'ordre du micromètre.
+Q: Que se passe-t-il quand on éloigne les deux trous d'Young éclairés par une source étendue ?
+R: L'interfrange diminue, puis le contraste chute (cohérence spatiale).
+@ quiz
+Q: En lumière blanche avec des trous d'Young, au centre de l'écran on observe :
++ une frange blanche, puis des franges irisées, puis du blanc d'ordre supérieur
+- une frange noire
+- uniquement du blanc d'ordre supérieur
+E: $\delta = 0$ pour toutes les longueurs d'onde au centre.
+Q: Dans un Michelson en lame d'air, quand on rapproche $e$ de 0, les anneaux :
++ rentrent vers le centre et disparaissent, et les anneaux restants s'espacent
+- sortent du centre
+- deviennent rectilignes
+E: L'ordre au centre $\frac{2e}{\lambda}$ diminue, donc les anneaux disparaissent au centre.
+
+=== Physique | Physique quantique | Introduction à la physique quantique
+@ preuve Inégalité de Heisenberg spatiale
+Admise. Elle se comprend avec les paquets d'ondes : un paquet de largeur $\Delta x$ nécessite une superposition de vecteurs d'onde d'étendue $\Delta k\gtrsim\frac{1}{\Delta x}$ (propriété de la transformée de Fourier), et $p = \hbar k$. On s'en sert surtout pour des ordres de grandeur ($\Delta p\sim\frac{\hbar}{\Delta x}$).
+@ preuve Quantification dans un puits infini
+Dans le puits, $\varphi'' = -k^2\varphi$ avec $k = \frac{\sqrt{2mE}}{\hbar}$, donc $\varphi = A\sin kx + B\cos kx$. La continuité de $\varphi$ en 0 et en $L$, où $\varphi = 0$ hors du puits, impose $B = 0$ et $kL = n\pi$. D'où $E_n = \frac{\hbar^2\pi^2n^2}{2mL^2}$, et la normalisation donne $A = \sqrt{\frac2L}$.
+@ formule Photon et onde de matière
+$E = h\nu = \hbar\omega$, $p = \frac h\lambda = \hbar k$ ; $\lambda_{\text{dB}} = \frac hp = \frac{h}{\sqrt{2mE_c}}$ (non relativiste). Électron accéléré sous 100 V : environ 0,12 nm (diffraction par les cristaux). $hc\approx1\,240$ eV·nm. Les effets quantiques sont notables quand $\lambda_{\text{dB}}$ est comparable aux dimensions du système.
+@ preuve
+Relations d'Einstein et de de Broglie (postulats). $E_c = \frac{p^2}{2m} = eU$ ; application numérique : $\lambda = \frac{6{,}6\times10^{-34}}{\sqrt{2\cdot9{,}1\times10^{-31}\cdot1{,}6\times10^{-17}}}\approx1{,}2\times10^{-10}$ m.
+@ formule Particule libre et densité de courant de probabilité
+Onde plane $\psi = Ae^{j(kx - \omega t)}$ avec $E = \hbar\omega = \frac{\hbar^2k^2}{2m}$ (relation de dispersion : $v_g = \frac{\hbar k}{m} = v_{\text{classique}}$). Densité de courant de probabilité $J = |A|^2\frac{\hbar k}{m}$. Une onde plane n'est pas normalisable : un état physique est un paquet d'ondes.
+@ preuve
+On injecte $\psi$ dans l'équation de Schrödinger avec $V = 0$. $v_g = \frac{d\omega}{dk} = \frac{\hbar k}{m} = \frac pm$, ce qui assure la correspondance classique. $J$ est le produit de la densité de probabilité par la vitesse.
+@ formule Marche et barrière de potentiel
+Marche $V_0$ avec $E>V_0$ : réflexion partielle, $R = \left(\frac{k_1 - k_2}{k_1 + k_2}\right)^2$ (impossible classiquement). Avec $E<V_0$ : onde évanescente $e^{-\kappa x}$ de profondeur $\frac1\kappa$, $\kappa = \frac{\sqrt{2m(V_0 - E)}}{\hbar}$, et réflexion totale. Barrière d'épaisseur $a$ avec $\kappa a\gg1$ : transmission par effet tunnel $T\approx16\frac{E}{V_0}\left(1 - \frac{E}{V_0}\right)e^{-2\kappa a}$.
+@ preuve
+On résout l'équation stationnaire dans chaque zone et on raccorde : continuité de $\varphi$ et de $\varphi'$. Pour la marche : $1 + r = t$ et $k_1(1 - r) = k_2t$, d'où $r$, puis $R = |r|^2$ (et $T = 1 - R$ par conservation du courant).
+@ formule Énergie de confinement et puits fini
+Une particule confinée sur une longueur $L$ a une énergie minimale de l'ordre de $\frac{\hbar^2}{mL^2}$ (Heisenberg : $\Delta p\gtrsim\frac{\hbar}{L}$). Puits fini : nombre fini d'états liés, fonctions d'onde débordant du puits (évanescentes), niveaux plus bas que ceux du puits infini de même largeur.
+@ preuve
+$E\geqslant\frac{\langle p^2\rangle}{2m}\geqslant\frac{\Delta p^2}{2m}\gtrsim\frac{\hbar^2}{2mL^2}$. Pour le puits fini, la fonction d'onde « voit » une largeur effective plus grande que $L$, donc l'énergie est plus basse.
+@ methode Raisonner en ordres de grandeur quantiques
+1. Calculer $\lambda_{\text{dB}}$ et la comparer à la taille caractéristique du système : comportement quantique si elles sont comparables.
+2. Énergie de confinement $\frac{\hbar^2}{2mL^2}$ : électron dans un atome ($L\sim0{,}1$ nm) : quelques eV ; nucléon dans un noyau ($L\sim1$ fm) : quelques MeV.
+3. Effet tunnel : comparer $\kappa a$ à 1 ; la transmission chute exponentiellement avec $a$ et $\sqrt m$ (microscope à effet tunnel, radioactivité $\alpha$).
+@ cartes
+Q: Valeur de $hc$ en eV·nm ?
+R: Environ 1 240 eV·nm.
+Q: Densité de courant de probabilité d'une onde plane ?
+R: $J = |A|^2\frac{\hbar k}{m}$.
+Q: Profondeur de pénétration d'une onde évanescente ?
+R: $\frac1\kappa = \frac{\hbar}{\sqrt{2m(V_0 - E)}}$.
+Q: Une particule d'énergie $E>V_0$ arrivant sur une marche peut-elle être réfléchie ?
+R: Oui, avec la probabilité $R = \left(\frac{k_1 - k_2}{k_1 + k_2}\right)^2$ (phénomène non classique).
+Q: Énergie d'un photon de 500 nm ?
+R: $\frac{1240}{500}\approx2{,}5$ eV.
+@ quiz
+Q: La probabilité de traversée par effet tunnel d'une barrière épaisse est :
++ exponentiellement décroissante avec l'épaisseur
+- proportionnelle à l'épaisseur
+- indépendante de la masse
+E: $T\propto e^{-2\kappa a}$ avec $\kappa\propto\sqrt m$.
+Q: La longueur d'onde de de Broglie d'une balle de tennis est :
++ beaucoup trop petite pour produire des effets observables
+- de l'ordre du mètre
+- égale à celle d'un électron
+E: $m\sim0{,}06$ kg et $v\sim50$ m/s donnent $\lambda\sim10^{-34}$ m.
+
+
 === Maths | Analyse | Formulaire : fonctions usuelles
 @ fiche
 ### Trigonométrie
@@ -4218,10 +5399,10 @@ ${$}
 
 `+e.fiche:e.fiche),["items","methodes","notes","cartes","quiz","preuves"].forEach(p=>i[p].push(...e[p]||[]))}));const u=r=>$(String(r).replace(/\$[^$]*\$/g,e=>e));return f.forEach(r=>(r.preuves||[]).forEach(e=>{const i=u(e.nom);let p=!1;r.items.forEach(l=>{u(l.nom)===i&&(l.preuve=e.texte,p=!0)}),e.ok=p})),f}v.FicheParser={parse:z,merge:w,slug:$,hash:d,KINDS:q},typeof module<"u"&&(module.exports=v.FicheParser)})(typeof window<"u"?window:globalThis);
 </script>
-<script>"use strict";const VERSION="1.3",MACROS={"\\N":"\\mathbb{N}","\\Z":"\\mathbb{Z}","\\Q":"\\mathbb{Q}","\\R":"\\mathbb{R}","\\C":"\\mathbb{C}","\\K":"\\mathbb{K}","\\ii":"\\llbracket #1 \\rrbracket","\\tr":"\\operatorname{tr}","\\rg":"\\operatorname{rg}","\\Vect":"\\operatorname{Vect}","\\Sp":"\\operatorname{Sp}","\\id":"\\mathrm{id}","\\Mat":"\\operatorname{Mat}","\\Ker":"\\operatorname{Ker}","\\Im":"\\operatorname{Im}","\\ch":"\\operatorname{ch}","\\sh":"\\operatorname{sh}","\\th":"\\operatorname{th}","\\grad":"\\overrightarrow{\\mathrm{grad}}\\,","\\rot":"\\overrightarrow{\\mathrm{rot}}\\,","\\dd":"\\mathrm{d}"},MATS=["Maths","Physique","Chimie"],MATCOL={Maths:"#4338ca",Physique:"#0e7490",Chimie:"#15803d"},matColor=t=>MATCOL[t]||"#9333ea",DAY=864e5,$=(t,e=document)=>e.querySelector(t),$$=(t,e=document)=>[...e.querySelectorAll(t)],esc=t=>String(t??"").replace(/[&<>"']/g,e=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[e]),norm=t=>String(t||"").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,""),uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7),shuffle=t=>{t=t.slice();for(let e=t.length-1;e>0;e--){const s=Math.floor(Math.random()*(e+1));[t[e],t[s]]=[t[s],t[e]]}return t},plural=(t,e,s)=>t+" "+(t>1?s||e+"s":e),ICON={back:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>',chev:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>',plus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',close:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',search:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>',more:'<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>',cours:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M4 5.5A2.5 2.5 0 016.5 3H20v15H6.5A2.5 2.5 0 004 20.5z"/><path d="M4 20.5A2.5 2.5 0 016.5 18H20v3H6.5A2.5 2.5 0 014 20.5z"/></svg>',revision:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="6" width="14" height="14" rx="2.5"/><path d="M7 3h11.5A2.5 2.5 0 0121 5.5V17"/></svg>',theoremes:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 3l2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.6 6.6 19.5l1.2-6L3.3 9.3l6.1-.7z"/></svg>',pdf:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M6 3h8l5 5v13H6z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h6"/></svg>',plusTab:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>'},mdCache=new Map;function tex(t,e){try{return katex.renderToString(t,{displayMode:e,throwOnError:!1,macros:{...MACROS},strict:!1,output:"html"})}catch{return'<code class="err">'+esc(t)+"</code>"}}function md(t,e){if(!t)return"";const s=(e?"i":"b")+t,i=mdCache.get(s);if(i)return i;const a=[];let n=String(t).replace(/\$\$([\s\S]+?)\$\$/g,(c,l)=>(a.push(tex(l.trim(),!0)),"\0"+(a.length-1)+"\0")).replace(/\$([^$\n]+?)\$/g,(c,l)=>(a.push(tex(l,!1)),"\0"+(a.length-1)+"\0"));n=esc(n);const r=c=>c.replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>").replace(/(^|[\s(])_([^_\n]+?)_(?=[\s).,;:!?]|$)/g,"$1<em>$2</em>");let o;if(e)o=r(n).replace(/\n/g,"<br>");else{const c=[];let l=[],d=null;const m=()=>{l.length&&(c.push("<p>"+r(l.join(" "))+"</p>"),l=[])},b=()=>{d&&(c.push("<"+d.t+">"+d.i.map(x=>"<li>"+r(x)+"</li>").join("")+"</"+d.t+">"),d=null)};for(const x of n.split(`
+<script>"use strict";const VERSION="1.4",MACROS={"\\N":"\\mathbb{N}","\\Z":"\\mathbb{Z}","\\Q":"\\mathbb{Q}","\\R":"\\mathbb{R}","\\C":"\\mathbb{C}","\\K":"\\mathbb{K}","\\ii":"\\llbracket #1 \\rrbracket","\\tr":"\\operatorname{tr}","\\rg":"\\operatorname{rg}","\\Vect":"\\operatorname{Vect}","\\Sp":"\\operatorname{Sp}","\\id":"\\mathrm{id}","\\Mat":"\\operatorname{Mat}","\\Ker":"\\operatorname{Ker}","\\Im":"\\operatorname{Im}","\\ch":"\\operatorname{ch}","\\sh":"\\operatorname{sh}","\\th":"\\operatorname{th}","\\grad":"\\overrightarrow{\\mathrm{grad}}\\,","\\rot":"\\overrightarrow{\\mathrm{rot}}\\,","\\dd":"\\mathrm{d}"},MATS=["Maths","Physique","Chimie"],MATCOL={Maths:"#4338ca",Physique:"#0e7490",Chimie:"#15803d"},matColor=t=>MATCOL[t]||"#9333ea",DAY=864e5,$=(t,e=document)=>e.querySelector(t),$$=(t,e=document)=>[...e.querySelectorAll(t)],esc=t=>String(t??"").replace(/[&<>"']/g,e=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[e]),norm=t=>String(t||"").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,""),uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7),shuffle=t=>{t=t.slice();for(let e=t.length-1;e>0;e--){const s=Math.floor(Math.random()*(e+1));[t[e],t[s]]=[t[s],t[e]]}return t},plural=(t,e,s)=>t+" "+(t>1?s||e+"s":e),ICON={back:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>',chev:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>',plus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',close:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',search:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>',more:'<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>',cours:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M4 5.5A2.5 2.5 0 016.5 3H20v15H6.5A2.5 2.5 0 004 20.5z"/><path d="M4 20.5A2.5 2.5 0 016.5 18H20v3H6.5A2.5 2.5 0 014 20.5z"/></svg>',revision:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="6" width="14" height="14" rx="2.5"/><path d="M7 3h11.5A2.5 2.5 0 0121 5.5V17"/></svg>',theoremes:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 3l2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.6 6.6 19.5l1.2-6L3.3 9.3l6.1-.7z"/></svg>',pdf:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M6 3h8l5 5v13H6z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h6"/></svg>',plusTab:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>'},mdCache=new Map;function tex(t,e){try{return katex.renderToString(t,{displayMode:e,throwOnError:!1,macros:{...MACROS},strict:!1,output:"html"})}catch{return'<code class="err">'+esc(t)+"</code>"}}function md(t,e){if(!t)return"";const s=(e?"i":"b")+t,i=mdCache.get(s);if(i)return i;const a=[];let n=String(t).replace(/\$\$([\s\S]+?)\$\$/g,(c,l)=>(a.push(tex(l.trim(),!0)),"\0"+(a.length-1)+"\0")).replace(/\$([^$\n]+?)\$/g,(c,l)=>(a.push(tex(l,!1)),"\0"+(a.length-1)+"\0"));n=esc(n);const r=c=>c.replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>").replace(/(^|[\s(])_([^_\n]+?)_(?=[\s).,;:!?]|$)/g,"$1<em>$2</em>");let o;if(e)o=r(n).replace(/\n/g,"<br>");else{const c=[];let l=[],d=null;const m=()=>{l.length&&(c.push("<p>"+r(l.join(" "))+"</p>"),l=[])},b=()=>{d&&(c.push("<"+d.t+">"+d.i.map(x=>"<li>"+r(x)+"</li>").join("")+"</"+d.t+">"),d=null)};for(const x of n.split(`
 `)){const v=x.trim();let f;if(!v){m(),b();continue}if(f=v.match(/^#{1,4}\s+(.*)$/)){m(),b(),c.push("<h4>"+r(f[1])+"</h4>");continue}if(f=v.match(/^&gt;\s?(.*)$/)){m(),b(),c.push('<div class="callout">'+r(f[1])+"</div>");continue}if(f=v.match(/^[-•*]\s+(.*)$/)){m(),(!d||d.t!=="ul")&&(b(),d={t:"ul",i:[]}),d.i.push(f[1]);continue}if(f=v.match(/^\d+[.)]\s+(.*)$/)){m(),(!d||d.t!=="ol")&&(b(),d={t:"ol",i:[]}),d.i.push(f[1]);continue}if(/^\u0000\d+\u0000$/.test(v)){m(),b(),c.push('<div class="dmath">'+v+"</div>");continue}if(d){d.i[d.i.length-1]+=" "+v;continue}l.push(v)}m(),b(),o=c.join("")}return o=o.replace(/\u0000(\d+)\u0000/g,(c,l)=>a[+l]),mdCache.size>3e3&&mdCache.clear(),mdCache.set(s,o),o}const Store={db:null,mem:{kv:{},pdf:{}},open(){return new Promise(t=>{try{const e=indexedDB.open("prepa-mp",1);e.onupgradeneeded=()=>{const s=e.result;s.objectStoreNames.contains("kv")||s.createObjectStore("kv"),s.objectStoreNames.contains("pdf")||s.createObjectStore("pdf")},e.onsuccess=()=>{this.db=e.result,t(!0)},e.onerror=()=>t(!1),e.onblocked=()=>t(!1),setTimeout(()=>t(!!this.db),4e3)}catch{t(!1)}})},req(t,e,s){return new Promise((i,a)=>{try{const n=this.db.transaction(t,e),r=s(n.objectStore(t));n.oncomplete=()=>i(r&&r.result),n.onerror=()=>a(n.error),n.onabort=()=>a(n.error)}catch(n){a(n)}})},async get(t,e){if(!this.db){if(t==="kv")try{const s=localStorage.getItem("prepa-"+e);if(s)return JSON.parse(s)}catch{}return this.mem[t][e]}return this.req(t,"readonly",s=>s.get(e))},async put(t,e,s){if(!this.db){if(this.mem[t][e]=s,t==="kv")try{localStorage.setItem("prepa-"+e,JSON.stringify(s))}catch{}return}return this.req(t,"readwrite",i=>i.put(s,e))},async del(t,e){if(!this.db){delete this.mem[t][e];return}return this.req(t,"readwrite",s=>s.delete(e))}},DEF=()=>({cards:{},quizq:{},quizch:{},favs:{},custom:[],imports:[],pdfs:[],settings:{theme:"auto",newPerDay:20},streak:{last:null,n:0},newDay:{d:null,n:0},tip:!1}),S={st:DEF(),chapters:[],byId:new Map,stack:[],tab:"cours",mat:"Maths",q:"",persistent:!1};let saveT=null;function save(){clearTimeout(saveT),saveT=setTimeout(()=>Store.put("kv","state",S.st).catch(t=>toast("Erreur de sauvegarde : "+t.message)),250)}function customToChapters(t){const e=new Map,s=[],i=a=>{const n=FicheParser.slug(a.matiere+"-"+a.titre);if(!e.has(n)){const r={matiere:a.matiere,partie:a.partie||"Divers",titre:a.titre,id:n,fiche:"",items:[],methodes:[],notes:[],cartes:[],quiz:[],preuves:[],source:"perso"};e.set(n,r),s.push(r)}return e.get(n)};for(const a of t){const n=i(a.chap);a.kind==="carte"?n.cartes.push({q:a.q,r:a.r,id:n.id+":c:u"+a.id,custom:a.id}):a.kind==="thm"?n.items.push({type:a.type||"thm",nom:a.nom,texte:a.texte,preuve:a.preuve||"",id:n.id+":t:u"+a.id,custom:a.id}):a.kind==="methode"?n.methodes.push({titre:a.titre,texte:a.texte,custom:a.id}):a.kind==="note"?n.notes.push({titre:a.titre,texte:a.texte,custom:a.id}):a.kind==="quiz"&&n.quiz.push({q:a.q,choix:[a.bonne,...a.mauvaises||[]],rep:0,expl:a.expl||"",id:n.id+":q:u"+a.id,custom:a.id})}return s}function buildData(){const t=FicheParser.parse($("#content-base").textContent,"base").chapters,e=S.st.imports.map(s=>FicheParser.parse(s.text,"import").chapters);S.chapters=FicheParser.merge([t,...e,customToChapters(S.st.custom)]),S.byId=new Map(S.chapters.map(s=>[s.id,s])),S.cardIndex=new Map,S.chapters.forEach(s=>s.cartes.forEach(i=>S.cardIndex.set(i.id,{k:i,c:s})))}const mats=()=>{const t=[...MATS];return S.chapters.forEach(e=>{t.includes(e.matiere)||t.push(e.matiere)}),t},chaptersOf=t=>S.chapters.filter(e=>e.matiere===t);function partiesOf(t){const e=[];return chaptersOf(t).forEach(s=>{e.includes(s.partie)||e.push(s.partie)}),e}function isDue(t,e=Date.now()){const s=S.st.cards[t.id];return!!s&&s.d<=e}function isNew(t){return!S.st.cards[t.id]}function isKnown(t){const e=S.st.cards[t.id];return!!e&&e.i>=7}function nextState(t,e){t=t?{...t}:{e:2.5,i:0,r:0,l:0};const s=Date.now();if(e===0)t.l++,t.i=0,t.e=Math.max(1.3,t.e-.2),t.d=s+10*6e4;else{e===1?(t.i=Math.max(1,Math.round(t.i*1.2)),t.e=Math.max(1.3,t.e-.15)):e===2?t.i=t.i===0?1:t.i===1?3:Math.round(t.i*t.e):(t.i=t.i===0?4:Math.round(t.i*t.e*1.3),t.e+=.15),t.i=Math.min(t.i,365);const i=new Date;i.setHours(4,0,0,0),t.d=i.getTime()+t.i*DAY}return t.r++,t}function fmtIv(t){return t.i===0?"10 min":t.i<31?t.i+" j":t.i<365?Math.round(t.i/30)+" mois":"1 an"}function chapStats(t){const e=Date.now();let s=0,i=0,a=0;return t.cartes.forEach(n=>{isNew(n)?i++:(isDue(n,e)&&s++,isKnown(n)&&a++)}),{due:s,nw:i,known:a,n:t.cartes.length,quiz:S.st.quizch[t.id]}}function bumpStreak(){const t=new Date().toDateString(),e=S.st.streak;if(e.last===t)return;const s=new Date(Date.now()-DAY).toDateString();e.n=e.last===s?e.n+1:1,e.last=t}function newLeftToday(){const t=new Date().toDateString();return S.st.newDay.d!==t&&(S.st.newDay={d:t,n:0}),Math.max(0,(S.st.settings.newPerDay||20)-S.st.newDay.n)}function toast(t,e=2400){const s=document.createElement("div");s.className="toast",s.textContent=t,document.body.appendChild(s),setTimeout(()=>s.remove(),e)}function dialog(t,{ok:e="OK",cancel:s="Annuler",input:i=null,danger:a=!1}={}){return new Promise(n=>{const r=document.createElement("div");r.className="back";const o=document.createElement("div");o.className="dlg",o.innerHTML=`<p>${esc(t)}</p>${i!==null?`<input id="dlgin" value="${esc(i)}" style="margin-bottom:14px">`:""}<div class="btns">${s?`<button class="btn ghost" data-r="0">${esc(s)}</button>`:""}<button class="btn ${a?"danger":""}" data-r="1">${esc(e)}</button></div>`;const c=d=>{r.remove(),o.remove(),n(d)};r.onclick=()=>c(i!==null?null:!1),o.onclick=d=>{const m=d.target.closest("[data-r]");m&&c(m.dataset.r==="1"?i!==null?$("#dlgin",o).value:!0:i!==null?null:!1)},document.body.append(r,o);const l=$("#dlgin",o);l&&(l.focus(),l.select())})}function sheet(t,e){const s=document.createElement("div");s.className="back";const i=document.createElement("div");i.className="sheet",i.innerHTML='<div class="grab"></div>'+t;const a=()=>{s.remove(),i.remove()};return s.onclick=a,i.close=a,document.body.append(s,i),e&&e(i,a),i}function overlay(t=""){const e=document.createElement("div");return e.className="ov "+t,document.body.appendChild(e),document.body.style.overflow="hidden",e.close=()=>{e.remove(),$(".ov")||(document.body.style.overflow="")},e}function setHeader(t,{back:e=!1,right:s=""}={}){$("#hdr").innerHTML=`<div class="bar"><div class="l">${e?`<button class="hbtn" data-a="back">${ICON.back}<span>Retour</span></button>`:""}</div><div class="t">${esc(t)}</div><div class="r">${s}</div></div>`}function renderTabs(){const t=S.chapters.reduce((s,i)=>s+chapStats(i).due,0),e=[["cours","Cours"],["revision","R\xE9viser"],["theoremes","Th\xE9or\xE8mes"],["pdf","PDF"],["plus","Plus"]];$("#tabs").innerHTML=e.map(([s,i])=>`<button data-a="tab" data-k="${s}" class="${S.tab===s?"on":""}">${ICON[s==="plus"?"plusTab":s]}${s==="revision"&&t?`<span class="badge">${t>99?"99+":t}</span>`:""}<span>${i}</span></button>`).join("")}function go(t,e={},s=!0){s?S.stack.push({view:t,args:e}):S.stack=[{view:t,args:e}],render(),window.scrollTo(0,0)}function render(){const t=S.stack[S.stack.length-1]||{view:S.tab,args:{}},e=VIEWS[t.view]||VIEWS.cours;document.documentElement.style.setProperty("--mat",matColor(t.args.mat||t.args.id&&S.byId.get(t.args.id)?.matiere||S.mat)),e(t.args),renderTabs()}const VIEWS={};function matSeg(t,e="mat"){return`<div class="chips">${mats().map(s=>`<button class="chip ${s===t?"on":""}" style="--mat:${matColor(s)}" data-a="${e}" data-m="${esc(s)}">${esc(s)}<span class="n">${chaptersOf(s).length}</span></button>`).join("")}</div>`}function srcTag(t){return t.source==="perso"||t.source==="import"?' <span class="mine">\xB7 perso</span>':""}VIEWS.cours=()=>{setHeader("Pr\xE9pa MP",{right:`<button class="hbtn" data-a="newchap" aria-label="Nouveau chapitre">${ICON.plus}</button>`});const t=S.mat;let e="";!(window.navigator.standalone||matchMedia("(display-mode: standalone)").matches)&&!S.st.tip&&(e=`<div class="tip"><div><b>Installe l'app</b> : dans Safari, touche <b>Partager</b> puis <b>Sur l'\xE9cran d'accueil</b>. Elle fonctionnera ensuite sans connexion.</div><button class="x" data-a="hidetip">\xD7</button></div>`),$("#view").innerHTML=`${e}<div class="srch">${ICON.search}<input id="q" type="search" placeholder="Rechercher un th\xE9or\xE8me, une notion\u2026" value="${esc(S.q)}" autocomplete="off"></div><div id="res"></div>`;const i=$("#q");i.oninput=()=>{S.q=i.value,renderCoursBody()},renderCoursBody()};function renderCoursBody(){const t=$("#res");if(!t)return;if(S.q.trim().length>=2){t.innerHTML=searchHtml(S.q);return}const e=S.mat;let s=matSeg(e);partiesOf(e).forEach(i=>{s+=`<h2 class="sec">${esc(i)}</h2><div class="list">`,chaptersOf(e).filter(a=>a.partie===i).forEach(a=>{const n=chapStats(a),r=n.n?Math.round(n.known/n.n*100):0,o=[];n.due&&o.push(`<b style="color:var(--bad)">${n.due} \xE0 revoir</b>`),o.push(plural(a.cartes.length,"carte")),a.quiz.length&&o.push(n.quiz?`quiz ${n.quiz.best} %`:plural(a.quiz.length,"question")),s+=`<button class="row" data-a="open" data-id="${a.id}"><div class="ring" style="--p:${r}">${r}%</div><div class="main"><div class="ti">${esc(a.titre)}${srcTag(a)}</div><div class="su">${o.join(" \xB7 ")}</div></div><span class="chev">${ICON.chev}</span></button>`}),s+="</div>"}),chaptersOf(e).length||(s+=`<div class="empty">Aucun chapitre en ${esc(e)}.</div>`),s+=`<div style="margin-top:18px"><button class="btn line block" data-a="newchap">${ICON.plus.replace("<svg",'<svg width="18" height="18"')} Nouveau chapitre</button></div>`,t.innerHTML=s}function searchHtml(t){const e=norm(t).split(/\s+/).filter(Boolean),s=a=>{const n=norm(a);return e.every(r=>n.includes(r))},i=[];return S.chapters.forEach(a=>{s(a.titre+" "+a.partie+" "+a.matiere)&&i.push({c:a,tab:"fiche",kind:"Chapitre",label:a.titre,score:3}),a.items.forEach(n=>{s(n.nom+" "+n.texte)&&i.push({c:a,tab:"res",kind:FicheParser.KINDS[n.type]||"R\xE9sultat",label:n.nom,score:s(n.nom)?2:1})}),a.methodes.forEach(n=>{s(n.titre+" "+n.texte)&&i.push({c:a,tab:"meth",kind:"M\xE9thode",label:n.titre,score:s(n.titre)?2:1})}),a.cartes.forEach(n=>{s(n.q+" "+n.r)&&i.push({c:a,tab:"cartes",kind:"Carte",label:n.q,score:.5})}),a.fiche&&s(a.fiche)&&i.push({c:a,tab:"fiche",kind:"Fiche",label:a.titre,score:1.5}),a.notes.forEach(n=>{s(n.titre+" "+n.texte)&&i.push({c:a,tab:"fiche",kind:"Note",label:n.titre,score:1})})}),i.sort((a,n)=>n.score-a.score),i.length?`<div class="tiny" style="margin:0 4px 8px">${plural(i.length,"r\xE9sultat")}</div><div class="list">`+i.slice(0,80).map(a=>`<button class="row" data-a="open" data-id="${a.c.id}" data-tab="${a.tab}"><span class="dot" style="--mat:${matColor(a.c.matiere)}"></span><div class="main"><div class="ti">${md(a.label,!0)}</div><div class="su">${esc(a.kind)} \xB7 ${esc(a.c.titre)}</div></div><span class="chev">${ICON.chev}</span></button>`).join("")+"</div>":`<div class="empty">Aucun r\xE9sultat pour \xAB ${esc(t)} \xBB.</div>`}VIEWS.chapter=({id:t,tab:e})=>{const s=S.byId.get(t);if(!s)return S.stack.pop(),render();e=e||"fiche",S.st.lastCh=t,setHeader(s.titre,{back:!0,right:`<button class="hbtn" data-a="add" data-id="${t}" aria-label="Ajouter">${ICON.plus}</button>`});const i=chapStats(s),a=S.st.pdfs.filter(o=>o.chap===t),n=[["fiche","Fiche"],["res",`R\xE9sultats ${s.items.length}`],["meth",`M\xE9thodes ${s.methodes.length}`],["cartes",`Cartes ${s.cartes.length}`],["quiz",`Quiz ${s.quiz.length}`],["pdf",`PDF ${a.length}`]];let r=`<div class="card hero"><div class="kicker">${esc(s.matiere)} \xB7 ${esc(s.partie)}</div><h1 class="big">${esc(s.titre)}</h1>
     <div class="stats"><div class="stat"><b>${i.known}/${i.n}</b><span>cartes acquises</span></div><div class="stat"><b style="color:${i.due?"var(--bad)":"inherit"}">${i.due}</b><span>\xE0 revoir</span></div><div class="stat"><b>${i.quiz?i.quiz.best+" %":"\u2014"}</b><span>meilleur quiz</span></div></div></div>
-    <div class="tabsx">${n.map(([o,c])=>`<button class="${o===e?"on":""}" data-a="ctab" data-id="${t}" data-k="${o}">${c}</button>`).join("")}</div><div id="ctab">`;r+=chapterTab(s,e,a)+"</div>",$("#view").innerHTML=r};function addBtn(t,e,s){return`<button class="btn line block" data-a="additem" data-id="${t}" data-kind="${e}" style="margin-top:6px">${ICON.plus.replace("<svg",'<svg width="18" height="18"')} ${s}</button>`}function editLink(t){return t.custom?`<button class="edit" data-a="edititem" data-cid="${t.custom}">Modifier</button>`:""}function chapterTab(t,e,s){if(e==="fiche"){let i="";return t.fiche&&(i+=`<div class="card prose">${md(t.fiche)}</div>`),t.notes.forEach(a=>{i+=`<div class="item"><div class="hd"><div class="nm">${md(a.titre||"Note",!0)}</div>${editLink(a)}</div><div class="prose">${md(a.texte)}</div></div>`}),i||(i='<div class="empty">Pas encore de fiche pour ce chapitre.</div>'),i+addBtn(t.id,"note","Ajouter une note")}if(e==="res")return(t.items.length?t.items.map(i=>itemHtml(i)).join(""):'<div class="empty">Aucun r\xE9sultat.</div>')+addBtn(t.id,"thm","Ajouter un th\xE9or\xE8me / une d\xE9finition");if(e==="meth")return(t.methodes.length?t.methodes.map(i=>`<div class="item"><div class="hd"><div class="nm">${md(i.titre,!0)}</div>${editLink(i)}</div><div class="prose">${md(i.texte)}</div></div>`).join(""):'<div class="empty">Aucune m\xE9thode.</div>')+addBtn(t.id,"methode","Ajouter une m\xE9thode");if(e==="cartes"){const i=chapStats(t);let a=`<div class="btns" style="margin-bottom:12px"><button class="btn mat" data-a="flashch" data-id="${t.id}" ${t.cartes.length?"":"disabled"}>R\xE9viser ${i.due+i.nw?`(${i.due+i.nw})`:"tout"}</button><button class="btn ghost" data-a="flashch" data-id="${t.id}" data-all="1" ${t.cartes.length?"":"disabled"}>Toutes les cartes</button></div>`;return a+=t.cartes.length?`<div class="card">${t.cartes.map(n=>{const r=S.st.cards[n.id];return`<div class="qa" data-a="toggleqa"><div class="q">${md(n.q,!0)}</div><div class="a prose">${md(n.r)}<div class="tiny" style="margin-top:6px">${r?`Prochaine r\xE9vision : ${r.d<=Date.now()?"maintenant":new Date(r.d).toLocaleDateString("fr-FR")}`:"Nouvelle carte"} ${editLink(n)}</div></div></div>`}).join("")}</div>`:'<div class="empty">Aucune carte.</div>',a+addBtn(t.id,"carte","Ajouter une flashcard")}if(e==="quiz"){const i=S.st.quizch[t.id];let a=`<div class="card"><div class="muted">${plural(t.quiz.length,"question")}${i?` \xB7 dernier score ${i.last} % \xB7 meilleur ${i.best} %`:""}</div><div style="margin-top:12px"><button class="btn mat block" data-a="quizch" data-id="${t.id}" ${t.quiz.length?"":"disabled"}>Lancer le quiz</button></div></div>`;const n=t.quiz.filter(r=>r.custom);return n.length&&(a+=`<h2 class="sec">Mes questions</h2><div class="card">${n.map(r=>`<div class="qa"><div class="q">${md(r.q,!0)}</div> ${editLink(r)}</div>`).join("")}</div>`),a+addBtn(t.id,"quiz","Ajouter une question")}return e==="pdf"?(s.length?`<div class="list">${s.map(pdfRow).join("")}</div>`:'<div class="empty">Aucun PDF associ\xE9 \xE0 ce chapitre.</div>')+`<div class="btns" style="margin-top:10px"><button class="btn ghost" data-a="pdfimport" data-chap="${t.id}">Importer un PDF</button><button class="btn ghost" data-a="pdflink" data-chap="${t.id}">Associer un PDF</button></div>`:""}function findItem(t){for(const e of S.chapters)for(const s of e.items)if(s.id===t)return s;return null}function itemHtml(t,e){const s=!!S.st.favs[t.id],i=t.preuve?'<button class="pbtn" data-a="proof">Preuve <span class="pch">\u203A</span></button><div class="proof prose hide"><div class="plbl">D\xE9monstration</div></div>':"";return`<div class="item ${t.preuve?"hasproof":""}" ${t.preuve?`data-a="proof" data-tid="${t.id}"`:""}><div class="hd"><div style="flex:1"><span class="badge2 ${t.type}">${esc(FicheParser.KINDS[t.type]||"R\xE9sultat")}</span>${e?` <span class="tiny">${esc(e.titre)}</span>`:""}<div class="nm">${md(t.nom,!0)}</div></div><button class="star ${s?"on":""}" data-a="fav" data-tid="${t.id}" aria-label="Favori">${s?"\u2605":"\u2606"}</button></div><div class="prose">${md(t.texte)}</div>${i}${editLink(t)}</div>`}VIEWS.revision=()=>{setHeader("R\xE9viser");const t=Date.now(),e=newLeftToday();let s=`<div class="card"><div class="stats" style="margin-top:0">
+    <div class="tabsx">${n.map(([o,c])=>`<button class="${o===e?"on":""}" data-a="ctab" data-id="${t}" data-k="${o}">${c}</button>`).join("")}</div><div id="ctab">`;r+=chapterTab(s,e,a)+"</div>",$("#view").innerHTML=r};function addBtn(t,e,s){return`<button class="btn line block" data-a="additem" data-id="${t}" data-kind="${e}" style="margin-top:6px">${ICON.plus.replace("<svg",'<svg width="18" height="18"')} ${s}</button>`}function editLink(t){return t.custom?`<button class="edit" data-a="edititem" data-cid="${t.custom}">Modifier</button>`:""}function chapterTab(t,e,s){if(e==="fiche"){let i="";return t.fiche&&(i+=`<div class="card prose">${md(t.fiche)}</div>`),t.notes.forEach(a=>{i+=`<div class="item"><div class="hd"><div class="nm">${md(a.titre||"Note",!0)}</div>${editLink(a)}</div><div class="prose">${md(a.texte)}</div></div>`}),i||(i='<div class="empty">Pas encore de fiche pour ce chapitre.</div>'),i+addBtn(t.id,"note","Ajouter une note")}if(e==="res")return(t.items.length?t.items.map(i=>itemHtml(i)).join(""):'<div class="empty">Aucun r\xE9sultat.</div>')+addBtn(t.id,"thm","Ajouter un th\xE9or\xE8me / une d\xE9finition");if(e==="meth")return(t.methodes.length?t.methodes.map(i=>`<div class="item"><div class="hd"><div class="nm">${md(i.titre,!0)}</div>${editLink(i)}</div><div class="prose">${md(i.texte)}</div></div>`).join(""):'<div class="empty">Aucune m\xE9thode.</div>')+addBtn(t.id,"methode","Ajouter une m\xE9thode");if(e==="cartes"){const i=chapStats(t);let a=`<div class="btns" style="margin-bottom:12px"><button class="btn mat" data-a="flashch" data-id="${t.id}" ${t.cartes.length?"":"disabled"}>R\xE9viser ${i.due+i.nw?`(${i.due+i.nw})`:"tout"}</button><button class="btn ghost" data-a="flashch" data-id="${t.id}" data-all="1" ${t.cartes.length?"":"disabled"}>Toutes les cartes</button></div>`;return a+=t.cartes.length?`<div class="card">${t.cartes.map(n=>{const r=S.st.cards[n.id];return`<div class="qa" data-a="toggleqa"><div class="q">${md(n.q,!0)}</div><div class="a prose">${md(n.r)}<div class="tiny" style="margin-top:6px">${r?`Prochaine r\xE9vision : ${r.d<=Date.now()?"maintenant":new Date(r.d).toLocaleDateString("fr-FR")}`:"Nouvelle carte"} ${editLink(n)}</div></div></div>`}).join("")}</div>`:'<div class="empty">Aucune carte.</div>',a+addBtn(t.id,"carte","Ajouter une flashcard")}if(e==="quiz"){const i=S.st.quizch[t.id];let a=`<div class="card"><div class="muted">${plural(t.quiz.length,"question")}${i?` \xB7 dernier score ${i.last} % \xB7 meilleur ${i.best} %`:""}</div><div style="margin-top:12px"><button class="btn mat block" data-a="quizch" data-id="${t.id}" ${t.quiz.length?"":"disabled"}>Lancer le quiz</button></div></div>`;const n=t.quiz.filter(r=>r.custom);return n.length&&(a+=`<h2 class="sec">Mes questions</h2><div class="card">${n.map(r=>`<div class="qa"><div class="q">${md(r.q,!0)}</div> ${editLink(r)}</div>`).join("")}</div>`),a+addBtn(t.id,"quiz","Ajouter une question")}return e==="pdf"?(s.length?`<div class="list">${s.map(pdfRow).join("")}</div>`:'<div class="empty">Aucun PDF associ\xE9 \xE0 ce chapitre.</div>')+`<div class="btns" style="margin-top:10px"><button class="btn ghost" data-a="pdfimport" data-chap="${t.id}">Importer un PDF</button><button class="btn ghost" data-a="pdflink" data-chap="${t.id}">Associer un PDF</button></div>`:""}function findItem(t){for(const e of S.chapters)for(const s of e.items)if(s.id===t)return s;return null}function itemHtml(t,e){const s=!!S.st.favs[t.id],i=t.preuve?`<button class="pbtn" data-a="proof">${t.id.startsWith("maths-")?"Preuve":"D\xE9monstration"} <span class="pch">\u203A</span></button><div class="proof prose hide"><div class="plbl">D\xE9monstration</div></div>`:"";return`<div class="item ${t.preuve?"hasproof":""}" ${t.preuve?`data-a="proof" data-tid="${t.id}"`:""}><div class="hd"><div style="flex:1"><span class="badge2 ${t.type}">${esc(FicheParser.KINDS[t.type]||"R\xE9sultat")}</span>${e?` <span class="tiny">${esc(e.titre)}</span>`:""}<div class="nm">${md(t.nom,!0)}</div></div><button class="star ${s?"on":""}" data-a="fav" data-tid="${t.id}" aria-label="Favori">${s?"\u2605":"\u2606"}</button></div><div class="prose">${md(t.texte)}</div>${i}${editLink(t)}</div>`}VIEWS.revision=()=>{setHeader("R\xE9viser");const t=Date.now(),e=newLeftToday();let s=`<div class="card"><div class="stats" style="margin-top:0">
     <div class="stat"><b>${S.st.streak.last===new Date().toDateString()||S.st.streak.last===new Date(t-DAY).toDateString()?S.st.streak.n:0} j</b><span>s\xE9rie en cours</span></div>
     <div class="stat"><b>${Object.keys(S.st.cards).length}</b><span>cartes vues</span></div>
     <div class="stat"><b>${S.chapters.reduce((n,r)=>n+r.cartes.filter(isKnown).length,0)}</b><span>acquises</span></div></div></div>`;const i=S.chapters.reduce((n,r)=>n+chapStats(r).due,0);s+=`<button class="btn block" data-a="flashall" style="margin-bottom:6px">R\xE9vision du jour \xB7 ${i} \xE0 revoir + ${Math.min(e,S.chapters.reduce((n,r)=>n+chapStats(r).nw,0))} nouvelles</button>`,s+=`<div class="tiny" style="text-align:center;margin-bottom:6px">Nouvelles cartes restantes aujourd'hui : ${e} (r\xE9glable dans Plus)</div>`,mats().forEach(n=>{const r=chaptersOf(n);if(!r.length)return;let o=0,c=0,l=0;r.forEach(d=>{const m=chapStats(d);o+=m.due,c+=m.nw,l+=d.quiz.length}),s+=`<h2 class="sec" style="color:${matColor(n)}">${esc(n)}</h2><div class="card" style="border-left:4px solid ${matColor(n)}"><div class="muted small">${o} \xE0 revoir \xB7 ${c} nouvelles \xB7 ${l} questions de quiz</div>
@@ -4239,7 +5420,7 @@ ${$}
     <div class="field"><label>Th\xE8me</label><div class="seg" style="margin:0">${[["auto","Auto"],["light","Clair"],["dark","Sombre"]].map(([i,a])=>`<button class="${t.theme===i?"on":""}" data-a="theme" data-v="${i}">${a}</button>`).join("")}</div></div>
     <div class="field" style="margin:0"><label>Nouvelles cartes par jour</label><div class="seg" style="margin:0">${[10,20,40,1e3].map(i=>`<button class="${t.newPerDay===i?"on":""}" data-a="npd" data-v="${i}">${i===1e3?"Illimit\xE9":i}</button>`).join("")}</div></div></div>
     <h2 class="sec">Stockage</h2><div class="card small" id="storinfo">Calcul\u2026</div>
-    <h2 class="sec">\xC0 propos</h2><div class="card small muted">Version 1.3 \xB7 ${plural(S.chapters.length,"chapitre")}, ${e("items")} th\xE9or\xE8mes et d\xE9finitions, ${e("methodes")} m\xE9thodes, ${e("cartes")} flashcards, ${e("quiz")} questions.<br>Tout est stock\xE9 sur ton appareil ; aucune donn\xE9e n'est envoy\xE9e.</div>
+    <h2 class="sec">\xC0 propos</h2><div class="card small muted">Version 1.4 \xB7 ${plural(S.chapters.length,"chapitre")}, ${e("items")} th\xE9or\xE8mes et d\xE9finitions, ${e("methodes")} m\xE9thodes, ${e("cartes")} flashcards, ${e("quiz")} questions.<br>Tout est stock\xE9 sur ton appareil ; aucune donn\xE9e n'est envoy\xE9e.</div>
     <button class="btn danger block" data-a="reset" style="margin-top:6px">R\xE9initialiser la progression</button>`,$("#view").innerHTML=s,storageInfo()};async function storageInfo(){const t=$("#storinfo");if(!t)return;let e=Store.db?"Base locale active (IndexedDB).":"Base locale indisponible : donn\xE9es en m\xE9moire seulement.";try{if(navigator.storage&&navigator.storage.estimate){const s=await navigator.storage.estimate();e+=` Utilis\xE9 : ${(s.usage/1048576).toFixed(1)} Mo${s.quota?" sur "+(s.quota/1073741824).toFixed(1)+" Go disponibles":""}.`}}catch{}e+=S.persistent?" Stockage persistant accord\xE9.":" Astuce : installe l'app sur l'\xE9cran d'accueil pour que Safari ne purge jamais tes donn\xE9es.",t.textContent=e}function startFlash(t,e){if(!t.length){toast("Rien \xE0 r\xE9viser ici pour le moment \u{1F389}");return}const s=overlay(),i={q:t.map(r=>({...r,again:0})),i:0,shown:!1,title:e,n:0,counts:[0,0,0,0],o:s};s.innerHTML=`<div class="ohd"><button class="hbtn" data-f="close">${ICON.close}</button><div class="t"></div><div style="width:40px"></div></div><div class="obody"></div><div class="ofoot"></div>`,s.onclick=r=>{const o=r.target.closest("[data-f]");if(!o)return;const c=o.dataset.f;if(c==="close"){s.close(),render();return}if(c==="show"){i.shown=!0,n();return}c==="g"&&a(+o.dataset.g)};function a(r){const o=i.q[i.i],c=isNew(o.k);S.st.cards[o.k.id]=nextState(S.st.cards[o.k.id],r),c&&(newLeftToday(),S.st.newDay.n++),i.counts[r]++,i.n++,bumpStreak(),save(),r===0&&o.again<2&&i.q.push({...o,again:o.again+1}),i.i++,i.shown=!1,n()}function n(){const r=i.q.length;if($(".t",s).textContent=i.title,i.i>=r){document.documentElement.style.setProperty("--mat",matColor(S.mat)),$(".obody",s).innerHTML=`<div class="score">${i.n}</div><div class="muted" style="text-align:center">cartes r\xE9vis\xE9es</div><div class="stats" style="max-width:520px;margin:20px auto"><div class="stat"><b style="color:#dc2626">${i.counts[0]}</b><span>\xE0 revoir</span></div><div class="stat"><b style="color:#d97706">${i.counts[1]}</b><span>difficiles</span></div><div class="stat"><b style="color:#16a34a">${i.counts[2]}</b><span>bien</span></div><div class="stat"><b style="color:#2563eb">${i.counts[3]}</b><span>faciles</span></div></div>`,$(".ofoot",s).innerHTML='<button class="btn block" data-f="close">Terminer</button>';return}const o=i.q[i.i];s.style.setProperty("--mat",matColor(o.c.matiere));const c=S.st.cards[o.k.id];$(".obody",s).innerHTML=`<div class="progress"><i style="width:${i.i/r*100}%"></i></div><div class="tiny" style="text-align:center;margin:-6px 0 10px">${i.i+1} / ${r} \xB7 ${esc(o.c.titre)}${o.again?" \xB7 \xE0 revoir":""}${c?"":" \xB7 nouvelle"}</div>
       <div class="fcard" data-f="show"><div class="lbl">Question</div><div class="prose">${md(o.k.q)}</div>${i.shown?`<div class="ans"><div class="lbl">R\xE9ponse</div><div class="prose">${md(o.k.r)}</div></div>`:""}</div>`,$(".ofoot",s).innerHTML=i.shown?`<div class="grades">${["\xC0 revoir","Difficile","Bien","Facile"].map((l,d)=>`<button class="g${d}" data-f="g" data-g="${d}">${l}<small>${fmtIv(nextState(c,d))}</small></button>`).join("")}</div>`:'<button class="btn mat block" data-f="show">Afficher la r\xE9ponse</button>',$(".obody",s).scrollTop=0}n()}function flashFor(t,{all:e=!1}={}){const s=Date.now();let i=newLeftToday();const a=[],n=[],r=[];return t.forEach(o=>o.cartes.forEach(c=>{const l={k:c,c:o};isNew(c)?n.push(l):isDue(c,s)?a.push(l):r.push(l)})),a.sort((o,c)=>S.st.cards[o.k.id].d-S.st.cards[c.k.id].d),e?[...a,...n,...shuffle(r)]:[...shuffle(a),...n.slice(0,i)]}function startQuiz(t,e,s){if(!t.length){toast("Aucune question disponible.");return}const i=overlay(),a={qs:t.map(({q:r,c:o})=>({q:r,c:o,order:shuffle(r.choix.map((c,l)=>l))})),i:0,ans:null,ok:0};i.innerHTML=`<div class="ohd"><button class="hbtn" data-f="close">${ICON.close}</button><div class="t">${esc(e)}</div><div style="width:40px"></div></div><div class="obody"></div><div class="ofoot"></div>`,i.onclick=r=>{const o=r.target.closest("[data-f]");if(!o)return;const c=o.dataset.f;if(c==="close"){i.close(),render();return}if(c==="ans"&&a.ans===null){a.ans=+o.dataset.k;const l=a.qs[a.i],d=a.ans===l.q.rep;d&&a.ok++,S.st.quizq[l.q.id]={ok:d,d:Date.now()},bumpStreak(),save(),n();return}if(c==="next"){a.i++,a.ans=null,n();return}c==="again"&&(i.close(),startQuiz(shuffle(t),e,s))};function n(){const r=a.qs.length;if(a.i>=r){const l=Math.round(a.ok/r*100);if(s){const d=S.st.quizch[s];S.st.quizch[s]={last:l,best:Math.max(l,d?d.best:0),d:Date.now()},save()}$(".obody",i).innerHTML=`<div class="score">${l} %</div><div class="muted" style="text-align:center">${a.ok} bonne${a.ok>1?"s":""} r\xE9ponse${a.ok>1?"s":""} sur ${r}</div><p class="muted small" style="text-align:center;margin-top:18px">${l===100?"Parfait !":l>=70?"Tr\xE8s bien, continue comme \xE7a.":"Les questions rat\xE9es sont dans \xAB Refaire mes erreurs \xBB."}</p>`,$(".ofoot",i).innerHTML='<div class="btns"><button class="btn ghost" data-f="again">Recommencer</button><button class="btn" data-f="close">Terminer</button></div>';return}const o=a.qs[a.i];i.style.setProperty("--mat",matColor(o.c.matiere));const c=a.ans;$(".obody",i).innerHTML=`<div class="progress"><i style="width:${a.i/r*100}%"></i></div><div class="tiny" style="text-align:center;margin:-6px 0 12px">Question ${a.i+1} / ${r} \xB7 ${esc(o.c.titre)}</div>
       <div class="prose" style="font-weight:600;margin-bottom:14px">${md(o.q.q)}</div>
